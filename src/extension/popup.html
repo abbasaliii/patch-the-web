@@ -75,8 +75,14 @@
 
       <section class="empty-state" id="empty-state">
         <span class="empty-mark">⌁</span>
-        <h1>No repair for this page</h1>
-        <p>Open the CivicApply demo to test the bundled community patch.</p>
+        <span class="eyebrow">No community repair yet</span>
+        <h1>Start a repair with Codex</h1>
+        <p>Describe what is broken. OpenPatch will copy a privacy-safe brief for the <strong>$openpatch-author</strong> skill.</p>
+        <label class="complaint-label" for="repair-complaint">What should work better?</label>
+        <textarea id="repair-complaint" maxlength="1000" rows="4" placeholder="This form loses my progress, overflows on mobile, and its errors are inaccessible."></textarea>
+        <button class="author-button" id="author-button" type="button"><span aria-hidden="true">✦</span> Copy Codex repair brief</button>
+        <p class="privacy-note">Structural signals only — never field values, cookies, storage, or URL queries.</p>
+        <p class="brief-status" id="brief-status" role="status" aria-live="polite"></p>
       </section>
     </main>
 

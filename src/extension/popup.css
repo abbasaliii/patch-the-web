@@ -74,9 +74,20 @@ input:focus-visible + .toggle { outline: 3px solid rgba(11, 154, 109, .2); outli
 details { border-top: 1px solid #edf1ef; }
 summary { padding-top: 12px; color: #516058; font-size: 10px; font-weight: 800; cursor: pointer; }
 ul { margin: 9px 0 0; padding-left: 18px; color: #6d7973; font-size: 10px; line-height: 1.65; }
-.empty-state { padding: 38px 24px 46px; text-align: center; }
+.empty-state { padding: 24px 16px 28px; text-align: center; }
 .empty-mark { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 13px; border: 1px dashed #b7c8c0; border-radius: 16px; color: #709182; background: white; font-size: 25px; }
 .empty-state p { margin: 8px auto 0; max-width: 260px; color: #718079; font-size: 12px; line-height: 1.5; }
+.empty-state > p strong { color: #40534a; }
+.complaint-label { display: block; margin: 20px 0 7px; color: #405047; font-size: 11px; font-weight: 800; text-align: left; }
+textarea { width: 100%; min-height: 86px; resize: vertical; padding: 11px 12px; border: 1px solid #cfdcd6; border-radius: 11px; color: #1d2d26; background: white; font: 12px/1.45 inherit; outline: none; }
+textarea::placeholder { color: #8a9891; }
+textarea:focus { border-color: #15966d; box-shadow: 0 0 0 3px rgba(21, 150, 109, .12); }
+.author-button { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 10px; padding: 12px 14px; border: 0; border-radius: 11px; color: white; background: #142820; font: 800 12px/1 inherit; cursor: pointer; }
+.author-button:hover { background: #1d3a2f; }
+.author-button:focus-visible { outline: 3px solid rgba(11, 154, 109, .25); outline-offset: 2px; }
+.author-button:disabled { cursor: wait; opacity: .65; }
+.empty-state .privacy-note { max-width: 310px; color: #849089; font-size: 9px; }
+.empty-state .brief-status { min-height: 15px; color: #08724f; font-size: 10px; font-weight: 800; }
 
 footer { display: flex; justify-content: space-between; padding: 12px 18px; border-top: 1px solid #e3ebe7; color: #748079; background: white; font-size: 9px; font-weight: 700; }
 footer span { display: flex; align-items: center; gap: 5px; }

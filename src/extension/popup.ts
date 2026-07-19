@@ -1,5 +1,6 @@
 import civicPatchJson from "../registry/patches/civic-apply.openpatch.json";
 import type { OpenPatch, PatchHealth } from "../core/types";
+import { buildRepairBrief, collectPageInventory } from "./repair-brief";
 
 type PageState = {
   matched: boolean;
@@ -16,6 +17,9 @@ const matchDot = byId<HTMLElement>("match-dot");
 const card = byId<HTMLElement>("patch-card");
 const empty = byId<HTMLElement>("empty-state");
 const toggle = byId<HTMLInputElement>("patch-toggle");
+const authorButton = byId<HTMLButtonElement>("author-button");
+const complaint = byId<HTMLTextAreaElement>("repair-complaint");
+const briefStatus = byId<HTMLElement>("brief-status");
 
 const CAPABILITY_LABELS: Record<string, string> = {
   layout: "Change allowlisted layout and visual properties",
@@ -82,6 +86,36 @@ toggle.addEventListener("change", async () => {
   const tab = await activeTab();
   if (tab.id) await chrome.tabs.reload(tab.id);
   window.close();
+});
+
+authorButton.addEventListener("click", async () => {
+  const request = complaint.value.trim();
+  if (request.length < 12) {
+    briefStatus.textContent = "Add a little more detail about what is broken.";
+    complaint.focus();
+    return;
+  }
+  const tab = await activeTab();
+  if (!tab.id || !tab.url?.startsWith("http")) {
+    briefStatus.textContent = "Open a normal website tab, then try again.";
+    return;
+  }
+  authorButton.disabled = true;
+  briefStatus.textContent = "Inspecting page structure…";
+  try {
+    const results = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: collectPageInventory
+    });
+    const inventory = results[0]?.result;
+    if (!inventory) throw new Error("No page inventory returned");
+    await navigator.clipboard.writeText(buildRepairBrief(request, inventory));
+    briefStatus.textContent = "Repair brief copied — paste it into Codex.";
+  } catch {
+    briefStatus.textContent = "This page blocks inspection. Try another website tab.";
+  } finally {
+    authorButton.disabled = false;
+  }
 });
 
 void init();

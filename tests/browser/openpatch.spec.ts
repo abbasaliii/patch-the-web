@@ -51,3 +51,16 @@ test("the safe patch repairs layout, accessibility, autosave, and keyboard behav
   await expect(secondStep).toBeFocused();
   expect(runtimeErrors).toEqual([]);
 });
+
+test("the public registry exposes a verifiable patch receipt", async ({ page }) => {
+  await page.goto("/");
+  const response = await page.request.get("/registry/index.json");
+  expect(response.ok()).toBe(true);
+  const registry = await response.json() as {
+    patches: Array<{ id: string; sha256: string; verification: { status: string; operations: number; assertions: number } }>;
+  };
+  expect(registry.patches[0].id).toBe("org.openpatch.civicapply-accessible-draft");
+  expect(registry.patches[0].sha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(registry.patches[0].verification).toEqual({ status: "verified", operations: 19, assertions: 10 });
+  await expect(page.locator("#registry-receipt")).toContainText("SHA-256");
+});

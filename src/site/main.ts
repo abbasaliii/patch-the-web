@@ -5,3 +5,35 @@ const observe = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll(".section, .proof-bar, .impact-band").forEach((element) => observe.observe(element));
+
+type RegistryIndex = {
+  patches: Array<{
+    version: string;
+    sha256: string;
+    scope: { hosts: string[]; paths: string[] };
+    verification: { status: string; operations: number; assertions: number };
+  }>;
+};
+
+async function loadRegistryReceipt() {
+  try {
+    const response = await fetch("/registry/index.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`Registry returned ${response.status}`);
+    const index = await response.json() as RegistryIndex;
+    const patch = index.patches[0];
+    if (!patch) throw new Error("Registry is empty");
+    const version = document.getElementById("registry-version");
+    const health = document.getElementById("registry-health");
+    const scope = document.getElementById("registry-scope");
+    const receipt = document.getElementById("registry-receipt");
+    if (version) version.textContent = `Published v${patch.version}`;
+    if (health) health.innerHTML = `<i></i> ${patch.verification.operations}/${patch.verification.operations}`;
+    if (scope) scope.textContent = `${patch.scope.hosts.join(", ")} · ${patch.scope.paths.join(", ")}`;
+    if (receipt) receipt.textContent = `SHA-256 ${patch.sha256} · ${patch.verification.assertions} assertions`;
+  } catch {
+    const receipt = document.getElementById("registry-receipt");
+    if (receipt) receipt.textContent = "Registry receipt unavailable — bundled demo remains usable.";
+  }
+}
+
+void loadRegistryReceipt();

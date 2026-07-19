@@ -13,6 +13,7 @@ Turn a concrete usability complaint into the smallest safe declarative repair. T
    - Name each broken behavior and the expected repaired behavior.
    - Separate site defects from user preferences.
    - Prefer one coherent workflow over unrelated page customization.
+   - If the OpenPatch extension supplied a structural preflight, use it only as a privacy-safe starting hint. Reinspect every selector against the live DOM.
 
 2. Inspect the exact target page.
    - Use the Chrome skill for a page in the user's existing Chrome session. Use the Browser skill for localhost or an in-app preview.
@@ -21,6 +22,7 @@ Turn a concrete usability complaint into the smallest safe declarative repair. T
    - Build selectors only from current DOM evidence. Do not guess accessible names, test IDs, or CSS structure.
    - Count every proposed selector. Forms, move targets, and keyboard containers must match exactly one element.
    - Do not submit forms, upload files, enter private data, or change site state unless the user explicitly authorized that action.
+   - Never collect field values, cookies, storage, URL query strings, or other private data for a repair brief.
 
 3. Plan the least-powerful repair.
    - Read [references/dsl.md](references/dsl.md) before creating or changing a patch.

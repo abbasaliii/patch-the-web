@@ -10,6 +10,17 @@
 
 The authoring workflow is technical, but the product's end user is a citizen, student, patient, shopper, or worker who needs an everyday website to function. Position OpenPatch as consumer agency over shared digital infrastructure.
 
+## Equal-weight judging strategy
+
+| Criterion | Evidence judges can see | Demo moment |
+| --- | --- | --- |
+| Technological Implementation | GPT‑5.6/Codex authoring workflow, constrained typed DSL, fail-closed validator, privacy-safe Repair Brief, per-operation health, SHA-256 registry receipt, unit and browser tests | Paste the Repair Brief into Codex, show the generated patch, then flash the green validator and test receipts |
+| Design | Coherent extension-to-Codex-to-registry flow, plain-language permissions, visible health, polished responsive landing page, dramatic exact-viewport before/after | Enable one repair and immediately remove overflow, obstruction, lost progress, generic errors, and broken keyboard behavior |
+| Potential Impact | Government, education, health, marketplace, and legacy-tool workflows; AI cost is paid once by the author while every downstream user needs no AI, account, or API key | Lose an unfinished benefits application before the repair; restore it after the repair |
+| Quality of the Idea | A public functional repair layer—not a theme editor and not an arbitrary userscript marketplace—with reusable community patches and breakage receipts | End on “When owners won’t fix it, users still can.” |
+
+The tie-breaker starts with Technological Implementation, so the video should show the real Codex workflow and test receipts—not only the polished UI.
+
 ## Description
 
 ### Inspiration
@@ -18,9 +29,11 @@ People are forced to use websites they did not choose and cannot change: governm
 
 ### What it does
 
-OpenPatch is a browser extension, a constrained transformation language, a Codex patch-authoring skill, and a public repair-registry concept.
+OpenPatch is a browser extension, a constrained transformation language, an installable Codex patch-authoring plugin, and a machine-readable public repair registry.
 
 A user opens a broken page and describes the problem to Codex. Codex inspects the live DOM and screenshots, maps the complaint to safe built-in operations, validates every selector and permission, and runs browser behavior tests. The resulting versioned patch runs only on its declared host and paths. Other users install the repair without AI, an account, or an API key.
+
+If no patch exists, the extension creates a privacy-safe Repair Brief that the user pastes into Codex. The brief includes only structural signals and bounded selector candidates—never field values, cookies, storage, query strings, or page text.
 
 Our CivicApply demo repairs a public-benefits form with 19 declarative operations. It fixes the 390px layout, preserves unfinished progress locally, restores a draft after a simulated session reset, adds accessible validation and arrow-key navigation, moves help into the workflow, and removes a blocking survey.
 
@@ -29,8 +42,8 @@ Our CivicApply demo repairs a public-benefits form with 19 declarative operation
 - Manifest V3 Chrome extension with a polished permission and health receipt
 - TypeScript transformation DSL and runtime
 - Fail-closed security validator with CSS, attribute, selector, scope, and capability allowlists
-- Repository-local `$openpatch-author` Codex skill
-- Versioned JSON patch registry entry
+- Official `.agents/skills` `$openpatch-author` workflow plus a distributable Codex plugin
+- Generated `/registry/index.json` with a versioned patch download and SHA-256 receipt
 - JSDOM unit tests plus Playwright desktop and 390px before/after tests
 - Vite landing page and intentionally broken CivicApply test portal
 
@@ -45,8 +58,8 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 ### Accomplishments
 
 - 19/19 operations healthy
-- 10/10 security and runtime tests passing
-- 4/4 desktop and mobile browser tests passing
+- 12/12 security, runtime, and privacy tests passing
+- 6/6 desktop and mobile browser tests passing
 - 10/10 publishing assertions passing
 - A working no-account, no-API-key extension flow
 - A validated Codex skill that turns complaints into test-gated patches
@@ -61,7 +74,7 @@ Publisher signing and moderation, remote registry sync and revocation, optional 
 
 ## Judge testing instructions
 
-1. Download the attached extension build or use `release/openpatch-extension-v0.1.0.zip`.
+1. Download the attached extension build or use `release/openpatch-extension-v0.2.0.zip`.
 2. Unzip it, open `chrome://extensions`, enable Developer mode, and load the folder unpacked.
 3. Start or open the public CivicApply demo URL.
 4. At 390px, observe horizontal overflow and the blocking survey.
@@ -83,11 +96,11 @@ No credentials or API key are needed.
 
 Open CivicApply at 390px. Pan across the overflowing form, show the survey covering controls, type a name and email, simulate a timeout, and show the cleared fields. Submit once to show the generic `FORM_12` error.
 
-**0:48–1:22 — Authoring with Codex**
+**0:48–1:25 — Authoring with Codex**
 
-Show the `$openpatch-author` skill, the complaint, the DOM/selector evidence, and the JSON patch. Say: “GPT‑5.6 through Codex authors only these constrained operations. There is no script, fetch, HTML injection, or API key in the extension.” Flash the validator output: policy passed, 19/19 operations, 4/4 assertions, SHA-256 receipt.
+On a page without a repair, type the complaint in the extension and choose **Copy Codex repair brief**. Flash the privacy receipt, paste the brief into Codex, then show `$openpatch-author`, live DOM/screenshot inspection, and the JSON patch. Say: “GPT‑5.6 through Codex authors only these constrained operations. The brief excludes private values, and there is no script, fetch, HTML injection, or API key in the extension.” Flash the validator output: policy passed, 19/19 operations, 10/10 assertions, SHA-256 receipt.
 
-**1:22–2:08 — Visible repair**
+**1:25–2:08 — Visible repair**
 
 Open the extension popup. Point out the exact website, policy-checked patch, permission list, and selector health. Enable the patch. Show the single-column layout and removed survey. Fill the form, simulate timeout, and show “Draft restored.” Enter an invalid email and show the specific accessible message. Use arrow keys on progress steps.
 
@@ -102,7 +115,8 @@ Show the registry landing page. “The AI is only needed once, when a patch is a
 ## Submission checklist
 
 - [ ] Deploy the landing page and CivicApply demo to a stable public URL
-- [ ] Upload the extension ZIP to a stable public download or attach it to a GitHub release
+- [ ] Upload `release/openpatch-extension-v0.2.0.zip` and `release/openpatch-codex-plugin-v0.2.0.zip` to a stable public download or GitHub release
+- [ ] Attach the validated Codex plugin package and mention the repo-discovered skill path
 - [ ] Make the repository public under the MIT license, or share private access with the required judge accounts
 - [ ] Add repository URL to Devpost
 - [ ] Record and upload a public YouTube video under 3 minutes

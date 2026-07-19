@@ -1,0 +1,7 @@
+.agents
+plugins
+release
+submission-assets
+tests
+playwright-report
+test-results

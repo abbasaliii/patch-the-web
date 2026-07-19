@@ -110,18 +110,19 @@
             </div>
           </div>
           <div class="registry-info">
-            <div class="registry-meta"><span class="category">Accessibility</span><span>Updated today</span></div>
+            <div class="registry-meta"><span class="category">Accessibility</span><span id="registry-version">Loading registry…</span></div>
             <h3>CivicApply: accessible & autosaved</h3>
             <p>Repairs mobile layout, preserves unfinished progress, adds keyboard navigation and accessible error messages, and removes an obstructive survey.</p>
             <div class="capabilities"><span>Layout</span><span>Autosave</span><span>ARIA</span><span>Keyboard</span><span>Validation</span></div>
             <div class="publisher">
               <span class="publisher-avatar">OP</span>
               <div><small>Published by</small><strong>OpenPatch Community <i>✓ Policy checked</i></strong></div>
-              <div class="installs"><small>Patch health</small><strong><i></i> 19/19</strong></div>
+              <div class="installs"><small>Patch health</small><strong id="registry-health"><i></i> 19/19</strong></div>
             </div>
+            <p class="registry-receipt" id="registry-receipt">Loading publication receipt…</p>
           </div>
           <div class="registry-action">
-            <div class="domain-lock"><span>⌾</span><div><small>Runs only on</small><strong>civicapply.example</strong></div></div>
+            <div class="domain-lock"><span>⌾</span><div><small>Demo scope</small><strong id="registry-scope">localhost · /demo/*</strong></div></div>
             <a href="/demo/">Open demo <span>→</span></a>
             <p>No AI or account required</p>
           </div>
@@ -134,9 +135,9 @@
           <h2>Powerful repairs.<br />Not a code injection marketplace.</h2>
           <p>Codex authors a small declarative patch. OpenPatch validates every operation against an allowlist, tests every selector, and shows users a plain-language permission receipt before anything runs.</p>
           <ul>
-            <li><span>01</span><div><strong>Declarative transformations only</strong><p>Layout, accessibility, persistence, navigation, validation, filtering, and reorganization.</p></div></li>
+            <li><span>01</span><div><strong>Declarative transformations only</strong><p>Layout, accessibility, persistence, navigation, validation, explicit hiding, and reorganization.</p></div></li>
             <li><span>02</span><div><strong>Exact domain and path scope</strong><p>A university portal patch cannot touch your bank, inbox, or another page.</p></div></li>
-            <li><span>03</span><div><strong>Continuous breakage detection</strong><p>Selector health turns red when the original site changes underneath a patch.</p></div></li>
+            <li><span>03</span><div><strong>Breakage detection on every apply</strong><p>Selector health turns red when the original site changes underneath a patch.</p></div></li>
           </ul>
         </div>
         <div class="code-card" aria-label="Example safe OpenPatch DSL">

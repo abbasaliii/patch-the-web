@@ -1,11 +1,12 @@
 {
   "name": "openpatch",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "A safe, community repair layer for websites users do not own.",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
+    "preview": "vite preview --host 127.0.0.1",
     "build": "npm run build:site && npm run build:extension",
     "build:site": "vite build",
     "build:extension": "node scripts/build-extension.mjs",

@@ -109,6 +109,7 @@ button, input, select, textarea { font: inherit; }
 .category { padding: 5px 8px; border-radius: 99px; color: #08724f; background: #e9f8f1; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
 .registry-info h3 { margin: 15px 0 10px; font-size: 23px; letter-spacing: -.035em; }
 .registry-info > p { max-width: 530px; margin: 0; color: #627169; font-size: 12px; line-height: 1.6; }
+.registry-info .registry-receipt { margin-top: 17px; padding: 8px 10px; border: 1px solid #dce9e3; border-radius: 8px; color: #587067; background: #f7fbf9; font: 8px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
 .capabilities { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 22px; }
 .capabilities span { padding: 5px 8px; border: 1px solid #dce6e1; border-radius: 7px; color: #5d6b64; font-size: 8px; font-weight: 750; }
 .publisher { display: flex; align-items: center; gap: 9px; }

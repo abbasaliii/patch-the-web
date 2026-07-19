@@ -20,6 +20,8 @@ OpenPatch applies 19 declarative operations that:
 - Move help into the application workflow
 - Remove the blocking survey and contradictory native save state
 
+On any page without a community patch, the extension can also create a **privacy-safe Repair Brief** for Codex. It includes the exact origin and path, viewport geometry, structural counts, accessibility signals, and bounded selector candidates—but never field values, cookies, storage, URL queries, or page text.
+
 The validator reports **19/19 healthy operations**, **10/10 publication assertions**, and a SHA-256 publication receipt. Local drafts expire automatically after 24 hours.
 
 | Before — fixed-width form and blocking survey | After — repaired, accessible, locally saved |
@@ -47,6 +49,13 @@ The patch language supports seven capabilities: allowlisted styles, safe attribu
 
 Requirements: Node.js 22+ and Chrome/Chromium.
 
+Prebuilt artifacts:
+
+- `release/openpatch-extension-v0.2.0.zip` — load-unpacked Chrome extension
+- `release/openpatch-codex-plugin-v0.2.0.zip` — validated Codex plugin package
+- Extension SHA-256: `4CD1F70F80D69A0D5C0C7DBB9E9F0412687ED2C81C0B20E710525C59245BC52A`
+- Plugin SHA-256: `ADDD9D9AFAB4CF9FB70DA19BBF6B170E0DA015B762EE333AF9051605D0054DB1`
+
 ```bash
 npm install
 npm run build
@@ -55,8 +64,8 @@ npm run dev -- --port 5173
 
 Then:
 
-1. Open `chrome://extensions` and enable **Developer mode**.
-2. Choose **Load unpacked** and select `dist/extension`.
+1. Unzip `release/openpatch-extension-v0.2.0.zip`.
+2. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the unzipped folder.
 3. Open `http://localhost:5173/demo/`.
 4. Try the broken form at a narrow viewport, enter sample data, and choose **Simulate timeout now**.
 5. Open the OpenPatch extension and enable **CivicApply: accessible & autosaved**.
@@ -64,6 +73,23 @@ Then:
 7. Submit an invalid email to see the accessible error, then focus a progress step and use the arrow keys.
 
 No account, test credential, API key, or external service is required.
+
+### Test the Codex authoring path
+
+1. Open any normal website tab that does not have a bundled repair.
+2. Open OpenPatch and describe the problem in **Start a repair with Codex**.
+3. Choose **Copy Codex repair brief**.
+4. Open this repository in Codex and paste the brief. Codex auto-discovers `$openpatch-author` from `.agents/skills/openpatch-author`.
+
+The same skill is packaged as a distributable Codex plugin under `plugins/openpatch`. The extension performs no model call; GPT‑5.6 operates through the user's existing Codex session only while a repair is authored.
+
+![OpenPatch privacy-safe Repair Brief authoring UI](submission-assets/openpatch-repair-brief.png)
+
+### Supported platforms
+
+- Extension: Chrome/Chromium 120+ on Windows, macOS, and Linux; the release candidate is tested with Playwright Chromium.
+- Authoring skill: ChatGPT desktop Codex, Codex CLI, and the Codex IDE extension on platforms that support repository skills.
+- Demo and registry: any modern browser; no account, login, API key, or test data required.
 
 ## Verification
 
@@ -77,18 +103,20 @@ npm run build
 
 Current results:
 
-- 10/10 unit tests pass
-- 4/4 desktop and 390px browser tests pass
+- 12/12 unit tests pass
+- 6/6 desktop and 390px browser tests pass
 - 19/19 constrained operations apply
 - 10/10 publication assertions pass
 - Production site and Manifest V3 extension build successfully
+- Public `/registry/index.json` and versioned patch download are generated with a SHA-256 receipt
 
 Browser tests prove both states: the original portal must be broken, and the patched portal must fit the viewport, restore a local draft after reload, expose specific accessible errors, and support arrow-key focus movement.
 
 ## Repository map
 
 ```text
-.codex/skills/openpatch-author/  Codex patch-authoring workflow
+.agents/skills/openpatch-author/ Codex patch-authoring workflow, auto-discovered in this repo
+plugins/openpatch/               Distributable Codex plugin package
 src/core/                      DSL types, domain matcher, validator, runtime
 src/extension/                 Manifest V3 content script, popup, service worker
 src/registry/patches/          Versioned community patches
@@ -126,7 +154,7 @@ Every patch declares an exact host/path scope, plain-language capabilities, cons
 
 The validator rejects unknown operations, event-handler attributes, network-capable CSS, broad document selectors, malformed scopes, undeclared capabilities, duplicate IDs, excessive operation counts, and sensitive persistence patterns. The runtime adds its own exclusions for password, file, authentication-code, payment, hidden, disabled, and submit fields.
 
-See [`src/core/validator.ts`](src/core/validator.ts) for executable policy and [`.codex/skills/openpatch-author/references/dsl.md`](.codex/skills/openpatch-author/references/dsl.md) for the authoring reference.
+See [`src/core/validator.ts`](src/core/validator.ts) for executable policy and [`.agents/skills/openpatch-author/references/dsl.md`](.agents/skills/openpatch-author/references/dsl.md) for the authoring reference.
 
 ## Codex collaboration
 
@@ -134,9 +162,9 @@ This project was created during the Build Week submission period in a single cor
 
 **Human product decisions:** the public repair-layer concept; the no-API-key distribution model; a deliberately constrained DSL instead of user scripts; the choice to demonstrate a public-benefits workflow; and the focus on agency, accessibility, and community reuse.
 
-**Where Codex accelerated the work:** translating the concept into a judge-focused vertical slice; scaffolding the Manifest V3 extension and static registry; implementing and threat-modeling the DSL; authoring the CivicApply repair; building unit and browser tests; running responsive visual QA; and turning browser failures into concrete layout and test-fixture fixes.
+**Where GPT‑5.6 through Codex accelerated the work:** translating the concept into a judge-focused vertical slice; scaffolding the Manifest V3 extension and public registry; implementing and threat-modeling the DSL; authoring the CivicApply repair; building the privacy-safe extension-to-Codex Repair Brief; packaging the official repo skill and plugin; building unit and browser tests; running responsive visual QA; and turning browser failures into concrete layout and test-fixture fixes.
 
-**Key joint tradeoff:** the hackathon MVP bundles one real, fully tested community patch instead of pretending a production-scale registry already exists. The versioned patch format, health model, authoring skill, and extension boundaries are designed so that registry sync and publisher signing can be added without changing what a patch is allowed to do.
+**Key joint tradeoff:** the hackathon MVP publishes one real, fully tested community patch instead of pretending a production-scale catalog already exists. The deployed registry is a genuine machine-readable endpoint with a version, scope, downloadable patch, operation/assertion counts, and SHA-256 receipt. Remote extension sync, publisher signing, moderation, and revocation remain explicit next milestones.
 
 Before final Devpost submission, the project thread's `/feedback` Codex Session ID will be added to the submission as required.
 
@@ -152,6 +180,7 @@ OpenPatch treats patches, websites, registry metadata, and page content as untru
 - Local draft storage stays on the page origin and excludes sensitive fields.
 - Community permissions are displayed before activation.
 - Patches never replace the site's actual authentication, submission, or server validation.
+- Repair Briefs exclude values, cookies, storage, query strings, and page text before anything is copied to Codex.
 
 The current MVP bundles its registry entry with the extension. Production registry transport, publisher signatures, moderation, and revocation are explicit next milestones.
 

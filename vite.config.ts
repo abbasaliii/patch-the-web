@@ -7,6 +7,7 @@ import { validatePatch } from "./src/core/validator";
 const root = __dirname;
 const siteOut = resolve(root, "dist/site");
 const patchSourceDir = resolve(root, "src/registry/patches");
+const releaseFiles = ["openpatch-extension-v0.3.0.zip", "openpatch-codex-plugin-v0.2.0.zip"];
 
 async function loadRegistryArtifacts() {
   const patchFiles = (await readdir(patchSourceDir)).filter((file) => file.endsWith(".openpatch.json")).sort();
@@ -73,8 +74,11 @@ const registryPlugin: Plugin = {
     const { artifacts, registry } = await loadRegistryArtifacts();
     const registryDir = resolve(siteOut, "registry");
     const patchDir = resolve(registryDir, "patches");
+    const downloadDir = resolve(siteOut, "downloads");
     await mkdir(patchDir, { recursive: true });
+    await mkdir(downloadDir, { recursive: true });
     await Promise.all(artifacts.map((artifact) => copyFile(artifact.sourcePath, resolve(patchDir, artifact.fileName))));
+    await Promise.all(releaseFiles.map((fileName) => copyFile(resolve(root, "release", fileName), resolve(downloadDir, fileName))));
     await writeFile(resolve(registryDir, "index.json"), JSON.stringify(registry, null, 2));
   }
 };

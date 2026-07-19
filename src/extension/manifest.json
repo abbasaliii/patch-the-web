@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "description": "Validate and install safe, domain-scoped community repairs for the web.",
   "permissions": ["storage", "activeTab", "scripting"],
-  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*", "*://openpatch-tau.vercel.app/*"],
   "optional_host_permissions": ["https://*/*", "http://*/*"],
   "background": {
     "service_worker": "background.js"

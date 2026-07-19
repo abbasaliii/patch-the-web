@@ -41,6 +41,7 @@ describe("OpenPatch policy validator", () => {
   it("keeps patches on their declared host and path", () => {
     const patch = civicPatch as OpenPatch;
     expect(patchMatchesUrl(patch, new URL("http://localhost/demo/"))).toBe(true);
+    expect(patchMatchesUrl(patch, new URL("https://openpatch-tau.vercel.app/demo/"))).toBe(true);
     expect(patchMatchesUrl(patch, new URL("http://localhost/bank/"))).toBe(false);
     expect(patchMatchesUrl(patch, new URL("https://example.com/demo/"))).toBe(false);
   });

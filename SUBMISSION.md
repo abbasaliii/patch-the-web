@@ -8,6 +8,15 @@
 
 **Recommended track:** Apps for Your Life
 
+## Final public links
+
+- Product and registry: https://openpatch-tau.vercel.app/
+- Live no-login demo: https://openpatch-tau.vercel.app/demo/
+- Chrome extension: https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.3.0.zip
+- Codex authoring plugin: https://openpatch-tau.vercel.app/downloads/openpatch-codex-plugin-v0.2.0.zip
+- Machine-readable registry: https://openpatch-tau.vercel.app/registry/index.json
+- Versioned community patch: https://openpatch-tau.vercel.app/registry/patches/civic-apply.openpatch.json
+
 The authoring workflow is technical, but the product's end user is a citizen, student, patient, shopper, or worker who needs an everyday website to function. Position OpenPatch as consumer agency over shared digital infrastructure.
 
 ## Equal-weight judging strategy
@@ -60,7 +69,7 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 
 - 19/19 operations healthy
 - 21/21 security, registry, preflight, runtime, and privacy tests passing
-- 1/1 production Manifest V3 extension integration test passing with a dynamically installed community patch
+- 2/2 production Manifest V3 extension integration tests passing with a dynamically installed community patch and the real public demo domain
 - 6/6 desktop and mobile browser tests passing
 - 10/10 publishing assertions passing
 - A working no-account, no-API-key extension flow
@@ -76,9 +85,9 @@ Publisher signing and moderation, automatic remote registry discovery and revoca
 
 ## Judge testing instructions
 
-1. Download the attached extension build or use `release/openpatch-extension-v0.3.0.zip`.
+1. Download https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.3.0.zip.
 2. Unzip it, open `chrome://extensions`, enable Developer mode, and load the folder unpacked.
-3. Start or open the public CivicApply demo URL.
+3. Open https://openpatch-tau.vercel.app/demo/.
 4. At 390px, observe horizontal overflow and the blocking survey.
 5. Enter synthetic values and choose **Simulate timeout now**; observe the lost fields.
 6. Open the extension and enable the verified CivicApply repair.
@@ -116,14 +125,14 @@ Show the registry landing page and download the safe patch. On its target page, 
 
 ## Submission checklist
 
-- [ ] Deploy the landing page and CivicApply demo to a stable public URL
-- [ ] Upload `release/openpatch-extension-v0.3.0.zip` and `release/openpatch-codex-plugin-v0.2.0.zip` to a stable public download or GitHub release
+- [x] Deploy the landing page and CivicApply demo to a stable public URL
+- [x] Upload `release/openpatch-extension-v0.3.0.zip` and `release/openpatch-codex-plugin-v0.2.0.zip` to a stable public download
 - [ ] Attach the validated Codex plugin package and mention the repo-discovered skill path
 - [ ] Make the repository public under the MIT license, or share private access with the required judge accounts
 - [ ] Add repository URL to Devpost
 - [ ] Record and upload a public YouTube video under 3 minutes
 - [ ] Add YouTube URL to Devpost
 - [ ] Run `/feedback` in the primary Codex build thread and add the Session ID
-- [ ] Add the public demo URL and exact no-login testing instructions
+- [x] Add the public demo URL and exact no-login testing instructions
 - [ ] Add project thumbnail and before/after screenshots from `dist/previews`
 - [ ] Complete all five Devpost steps and submit before July 21, 2026 at 5:00 PM Pacific

@@ -3,10 +3,10 @@
   "id": "org.openpatch.civicapply-accessible-draft",
   "name": "CivicApply: accessible & autosaved",
   "summary": "Repairs the mobile application flow, preserves unfinished progress, adds accessible validation, and removes the obstructive survey.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": { "name": "OpenPatch Community", "verified": false },
   "match": {
-    "hosts": ["localhost", "127.0.0.1"],
+    "hosts": ["localhost", "127.0.0.1", "openpatch-tau.vercel.app"],
     "paths": ["/demo/*"]
   },
   "capabilities": [
@@ -239,5 +239,5 @@
     { "type": "attribute", "selector": "#household-size", "name": "aria-required", "value": "true" },
     { "type": "attribute", "selector": "#address", "name": "aria-required", "value": "true" }
   ],
-  "changelog": "Hardened community repair: preserve mobile agency navigation, complete required-field semantics, add 24-hour draft expiry, and expand publication assertions."
+  "changelog": "Added the permanent public demo domain while preserving the hardened mobile navigation, required-field semantics, 24-hour draft expiry, and publication assertions."
 }

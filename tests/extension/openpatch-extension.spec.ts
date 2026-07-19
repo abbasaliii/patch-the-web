@@ -68,7 +68,29 @@ test("the production extension loads validated local patches and the bundled rep
   await expect(page.locator("#benefits-form")).toHaveAttribute("title", "Community repair runtime active");
   await expect(page.locator(".openpatch-save-status")).toContainText("Draft saved");
   const markers = await page.locator("html").getAttribute("data-openpatch-applied");
-  expect(markers).toContain("org.openpatch.civicapply-accessible-draft@1.1.0");
+  expect(markers).toContain("org.openpatch.civicapply-accessible-draft@1.2.0");
   expect(markers).toContain(`${patchId}@1.0.0`);
 
+});
+
+test("the packaged extension repairs the real public demo domain", async () => {
+  let worker = context.serviceWorkers()[0];
+  if (!worker) worker = await context.waitForEvent("serviceworker");
+  await worker.evaluate(async () => {
+    const stored = await chrome.storage.local.get("enabledPatches");
+    const enabledPatches = (stored.enabledPatches ?? {}) as Record<string, boolean>;
+    enabledPatches["org.openpatch.civicapply-accessible-draft"] = true;
+    await chrome.storage.local.set({ enabledPatches });
+  });
+
+  const publicMatches = "*://openpatch-tau.vercel.app/demo/*";
+  await expect.poll(async () => worker.evaluate(async (match) =>
+    (await chrome.scripting.getRegisteredContentScripts()).some((script) => script.matches?.includes(match)), publicMatches
+  )).toBe(true);
+
+  const page = await context.newPage();
+  await page.goto("https://openpatch-tau.vercel.app/demo/");
+  await expect(page.locator(".survey-wall")).toBeHidden();
+  await expect(page.locator(".openpatch-save-status")).toContainText("Draft saved");
+  await expect(page.locator("html")).toHaveAttribute("data-openpatch-applied", /org\.openpatch\.civicapply-accessible-draft@1\.2\.0/);
 });

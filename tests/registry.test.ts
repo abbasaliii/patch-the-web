@@ -35,7 +35,7 @@ describe("community patch catalog", () => {
   it("keeps discovery and Chrome permissions within declared domains and paths", () => {
     expect(matchingCatalogPatches([{ patch: civicPatch, source: "bundled" }], new URL("http://localhost/demo/start"))).toHaveLength(1);
     expect(matchingCatalogPatches([{ patch: civicPatch, source: "bundled" }], new URL("http://localhost/account"))).toHaveLength(0);
-    expect(contentScriptMatches([civicPatch])).toEqual(["http://127.0.0.1/demo/*", "http://localhost/demo/*"]);
-    expect(permissionOrigins(civicPatch)).toEqual(["http://127.0.0.1/*", "http://localhost/*"]);
+    expect(contentScriptMatches([civicPatch])).toEqual(["*://openpatch-tau.vercel.app/demo/*", "http://127.0.0.1/demo/*", "http://localhost/demo/*"]);
+    expect(permissionOrigins(civicPatch)).toEqual(["*://openpatch-tau.vercel.app/*", "http://127.0.0.1/*", "http://localhost/*"]);
   });
 });

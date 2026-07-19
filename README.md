@@ -6,6 +6,8 @@ OpenPatch is a safe, public repair layer for websites users do not own. A user s
 
 Built for OpenAI Build Week 2026 with Codex and GPT‑5.6.
 
+**Live product:** [openpatch-tau.vercel.app](https://openpatch-tau.vercel.app/) · [Live CivicApply demo](https://openpatch-tau.vercel.app/demo/) · [Public registry](https://openpatch-tau.vercel.app/registry/index.json)
+
 ## The demo
 
 The bundled CivicApply portal recreates a familiar high-stakes failure: a public-benefits form that overflows on mobile, loses unfinished progress, reports generic inaccessible errors, and is covered by a survey.
@@ -49,32 +51,34 @@ The patch language supports seven capabilities: allowlisted styles, safe attribu
 
 ## Judge quick start
 
-Requirements: Node.js 22+ and Chrome/Chromium.
+Requirements for the public demo: Chrome/Chromium 120+. No build, account, credential, or API key is required.
 
 Prebuilt artifacts:
 
-- `release/openpatch-extension-v0.3.0.zip` — load-unpacked Chrome extension
-- `release/openpatch-codex-plugin-v0.2.0.zip` — validated Codex plugin package
-- Extension SHA-256: `20009248DAC41BD075FB502FBF37C9441F144CC54C64A8F27C8FD3A576B42698`
+- [OpenPatch extension v0.3.0](https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.3.0.zip) — load-unpacked Chrome extension
+- [OpenPatch Codex plugin v0.2.0](https://openpatch-tau.vercel.app/downloads/openpatch-codex-plugin-v0.2.0.zip) — validated authoring plugin
+- Extension SHA-256: `1D04C2C87D9AB5B8813B6DA4AA9315E12C3D8BA737A95D5DEC3C0910470B6437`
 - Plugin SHA-256: `ADDD9D9AFAB4CF9FB70DA19BBF6B170E0DA015B762EE333AF9051605D0054DB1`
-
-```bash
-npm install
-npm run build
-npm run dev -- --port 5173
-```
 
 Then:
 
-1. Unzip `release/openpatch-extension-v0.3.0.zip`.
+1. Download and unzip the public extension artifact above.
 2. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the unzipped folder.
-3. Open `http://localhost:5173/demo/`.
+3. Open [the live CivicApply demo](https://openpatch-tau.vercel.app/demo/).
 4. Try the broken form at a narrow viewport, enter sample data, and choose **Simulate timeout now**.
 5. Open the OpenPatch extension and enable **CivicApply: accessible & autosaved**.
 6. Enter sample data again, simulate another timeout, and watch the patch restore it.
 7. Submit an invalid email to see the accessible error, then focus a progress step and use the arrow keys.
 
 No account, test credential, API key, or external service is required.
+
+For local development only:
+
+```bash
+npm install
+npm run build
+npm run dev -- --port 5173
+```
 
 ### Test the Codex authoring path
 
@@ -119,7 +123,7 @@ Current results:
 
 - 21/21 unit, policy, registry, preflight, runtime, and privacy tests pass
 - 6/6 desktop and 390px browser tests pass
-- 1/1 production Manifest V3 extension integration test passes with a dynamically installed patch
+- 2/2 production Manifest V3 extension integration tests pass with a dynamically installed patch and the real public demo domain
 - 19/19 constrained operations apply
 - 10/10 publication assertions pass
 - Production site and Manifest V3 extension build successfully
@@ -149,7 +153,7 @@ Every patch declares an exact host/path scope, plain-language capabilities, cons
   "schemaVersion": 1,
   "id": "org.openpatch.civicapply-accessible-draft",
   "match": {
-    "hosts": ["localhost", "127.0.0.1"],
+    "hosts": ["localhost", "127.0.0.1", "openpatch-tau.vercel.app"],
     "paths": ["/demo/*"]
   },
   "capabilities": ["local-storage", "validation"],

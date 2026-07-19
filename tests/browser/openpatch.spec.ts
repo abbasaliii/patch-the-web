@@ -81,6 +81,16 @@ test("the original care directory is usable but forces people to inspect every s
   await expect(page.locator("#care-directory input[type='search']")).toHaveCount(0);
   await expect(page.locator("#care-directory select")).toHaveCount(0);
   await expect(page.locator(".care-community-promo")).toBeVisible();
+  await expect(page.locator("#judge-preview")).toHaveText(/Preview OpenPatch instantly/);
+});
+
+test("the instant judge preview invokes the same constrained runtime", async ({ page }) => {
+  await page.goto("/care/");
+  await page.locator("#judge-preview").click();
+  await expect(page.locator(".openpatch-navigator")).toBeVisible();
+  await expect(page.locator("#judge-preview")).toHaveAttribute("data-healthy", "10");
+  await expect(page.locator("#judge-preview")).toHaveAttribute("data-total", "10");
+  await expect(page.locator("#judge-preview")).toHaveText("✓ OpenPatch active · 10/10 healthy");
 });
 
 test("the feature patch privately combines access needs, persists them, and supports the keyboard", async ({ page }, testInfo) => {

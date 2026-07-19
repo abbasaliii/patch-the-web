@@ -65,6 +65,8 @@ Prebuilt artifacts:
 
 Then:
 
+**Zero-install judge preview:** open [the live MetroCare demo](https://openpatch-tau.vercel.app/care/) and choose **Preview OpenPatch instantly**. This invokes the same constrained runtime and reports `10/10 healthy`; the steps below verify the real extension distribution path.
+
 1. Download and unzip the public extension artifact above.
 2. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the unzipped folder.
 3. Open [the live MetroCare demo](https://openpatch-tau.vercel.app/care/).
@@ -125,7 +127,7 @@ npm run verify
 Current results:
 
 - 31/31 unit, policy, registry, preflight, runtime, and privacy tests pass
-- 10/10 desktop and 390px browser journeys pass
+- 12/12 desktop and 390px browser journeys pass, including the zero-install judge preview
 - 4/4 Manifest V3 extension integration tests pass with a dynamically installed patch plus both real public demo domains
 - 10/10 flagship constrained operations apply; 19/19 CivicApply operations remain healthy
 - 8/8 flagship publication assertions pass; 10/10 CivicApply assertions remain healthy

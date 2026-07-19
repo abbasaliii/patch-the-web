@@ -74,7 +74,7 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 - 19/19 CivicApply repair operations and 10/10 assertions remain healthy
 - 31/31 security, registry, preflight, runtime, and privacy tests passing
 - 4/4 Manifest V3 extension integration tests passing, including both real public demo domains
-- 10/10 desktop and 390px browser journeys passing
+- 12/12 desktop and 390px browser journeys passing, including the instant judge preview
 - Browser proof that filter interactions emit zero network requests
 - A working no-account, no-API-key extension flow
 - A validated Codex skill that turns complaints into test-gated patches
@@ -89,15 +89,14 @@ Publisher signing and moderation, automatic remote registry discovery and revoca
 
 ## Judge testing instructions
 
-1. Download https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.4.0.zip.
-2. Unzip it, open `chrome://extensions`, enable Developer mode, and load the folder unpacked.
-3. Open https://openpatch-tau.vercel.app/care/.
-4. Observe twelve service cards and no search or filters. The directory is functional, but a person must inspect every card.
-5. Open the extension and enable **MetroCare: personal service navigator**.
-6. Choose **Wheelchair access**, **Urdu**, and **Accepting new patients**.
-7. Observe one result—Harbor Family Clinic—and the live `1 of 12 services match` announcement.
-8. Reload and see the preferences restored on-device; press `/` to focus search and Escape to clear it.
-9. For the second proof, open `/demo/` and enable CivicApply to test draft restoration and accessible validation.
+1. Open https://openpatch-tau.vercel.app/care/ and observe twelve service cards with no search or filters.
+2. Choose **Preview OpenPatch instantly**. The button reports `10/10 healthy` and reveals the exact constrained runtime with no install.
+3. Choose **Wheelchair access**, **Urdu**, and **Accepting new patients**; observe Harbor Family Clinic and the live `1 of 12 services match` announcement.
+4. To verify distribution, download https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.4.0.zip.
+5. Unzip it, open `chrome://extensions`, enable Developer mode, and load the folder unpacked.
+6. Reload the original MetroCare page, open the extension, and enable **MetroCare: personal service navigator**.
+7. Repeat the filters, reload to see preferences restored on-device, and press `/` to focus search.
+8. For the second proof, open `/demo/` and enable CivicApply to test draft restoration and accessible validation.
 
 No credentials or API key are needed.
 
@@ -117,7 +116,7 @@ On a page without a repair, type the request in the extension and choose **Copy 
 
 **1:25–2:08 — Visible repair**
 
-Open the extension popup. Point out exact-domain scope, policy check, capabilities, and selector health. Enable the patch. Select wheelchair access, Urdu, and accepting new patients: twelve cards become one. Reload to prove the preferences stay local, press `/` to focus search, and say: “Our browser test proves these interactions make zero network requests.”
+First click **Preview OpenPatch instantly** so judges see the feature without setup and the `10/10 healthy` receipt. Then open the extension popup and point out exact-domain scope, policy check, capabilities, and selector health. Select wheelchair access, Urdu, and accepting new patients: twelve cards become one. Reload to prove preferences stay local, press `/` to focus search, and say: “Our browser test proves these interactions make zero network requests.”
 
 **2:08–2:32 — Community loop**
 

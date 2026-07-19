@@ -29,6 +29,15 @@ describe("OpenPatch policy validator", () => {
     expect(result.ok).toBe(false);
   });
 
+  it("rejects document-root and disguised universal selectors", () => {
+    for (const selector of [":root", ":is(*)"]) {
+      const unsafe = structuredClone(civicPatch) as typeof civicPatch;
+      unsafe.operations[0] = { id: "broad-selector", type: "hide", selector };
+      const result = validatePatch(unsafe);
+      expect(result.ok).toBe(false);
+    }
+  });
+
   it("keeps patches on their declared host and path", () => {
     const patch = civicPatch as OpenPatch;
     expect(patchMatchesUrl(patch, new URL("http://localhost/demo/"))).toBe(true);
@@ -43,5 +52,32 @@ describe("OpenPatch policy validator", () => {
     const result = validatePatch(unsafe);
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.issues.some((issue) => issue.path.endsWith("ttlMinutes"))).toBe(true);
+  });
+
+  it("rejects path wildcards that could silently broaden scope", () => {
+    const unsafe = structuredClone(civicPatch) as typeof civicPatch;
+    unsafe.match.paths = ["/*/account/*"];
+    const result = validatePatch(unsafe);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.issues.some((issue) => issue.path === "match.paths[0]")).toBe(true);
+  });
+
+  it("validates publication assertions instead of trusting receipt metadata", () => {
+    const unsafe = structuredClone(civicPatch) as unknown as Record<string, unknown>;
+    unsafe.verify = [{ type: "exists", selector: "body", min: 20, max: 1 }];
+    const result = validatePatch(unsafe);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.issues.some((issue) => issue.path.startsWith("verify[0]"))).toBe(true);
+  });
+
+  it("rejects regular expressions with catastrophic nested quantifiers", () => {
+    const unsafe = structuredClone(civicPatch) as typeof civicPatch;
+    const validation = unsafe.operations.find((operation) => operation.type === "validation") as {
+      fields: Array<{ rules: Array<{ kind: string; value?: string; message: string }> }>;
+    };
+    validation.fields[0].rules = [{ kind: "pattern", value: "(a+)+$", message: "Use a valid value." }];
+    const result = validatePatch(unsafe);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.issues.some((issue) => issue.message.includes("bounded regular expression"))).toBe(true);
   });
 });

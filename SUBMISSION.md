@@ -31,7 +31,7 @@ People are forced to use websites they did not choose and cannot change: governm
 
 OpenPatch is a browser extension, a constrained transformation language, an installable Codex patch-authoring plugin, and a machine-readable public repair registry.
 
-A user opens a broken page and describes the problem to Codex. Codex inspects the live DOM and screenshots, maps the complaint to safe built-in operations, validates every selector and permission, and runs browser behavior tests. The resulting versioned patch runs only on its declared host and paths. Other users install the repair without AI, an account, or an API key.
+A user opens a broken page and describes the problem to Codex. Codex inspects the live DOM and screenshots, maps the complaint to safe built-in operations, validates every selector and permission, and runs browser behavior tests. The resulting versioned patch runs only on its declared host and paths. Other users download its `.openpatch.json`; the extension independently validates policy, checks the current URL, preflights every live selector, shows a SHA-256 permission receipt, and requests Chrome access only for the declared domains. No AI, account, or API key is needed to install it.
 
 If no patch exists, the extension creates a privacy-safe Repair Brief that the user pastes into Codex. The brief includes only structural signals and bounded selector candidates—never field values, cookies, storage, query strings, or page text.
 
@@ -40,6 +40,7 @@ Our CivicApply demo repairs a public-benefits form with 19 declarative operation
 ### How we built it
 
 - Manifest V3 Chrome extension with a polished permission and health receipt
+- Safe community import with exact-domain Chrome permissions, live selector preflight, local versioning, and fail-closed runtime registration
 - TypeScript transformation DSL and runtime
 - Fail-closed security validator with CSS, attribute, selector, scope, and capability allowlists
 - Official `.agents/skills` `$openpatch-author` workflow plus a distributable Codex plugin
@@ -58,7 +59,8 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 ### Accomplishments
 
 - 19/19 operations healthy
-- 12/12 security, runtime, and privacy tests passing
+- 21/21 security, registry, preflight, runtime, and privacy tests passing
+- 1/1 production Manifest V3 extension integration test passing with a dynamically installed community patch
 - 6/6 desktop and mobile browser tests passing
 - 10/10 publishing assertions passing
 - A working no-account, no-API-key extension flow
@@ -70,11 +72,11 @@ The safest repair is the smallest operation that makes an acceptance criterion o
 
 ### What's next
 
-Publisher signing and moderation, remote registry sync and revocation, optional per-domain Chrome permissions, automated scheduled breakage checks, patch discovery by URL, community review, and additional built-ins such as declarative filtering and reading modes.
+Publisher signing and moderation, automatic remote registry discovery and revocation, scheduled breakage checks, community review, and additional built-ins such as declarative filtering and reading modes.
 
 ## Judge testing instructions
 
-1. Download the attached extension build or use `release/openpatch-extension-v0.2.0.zip`.
+1. Download the attached extension build or use `release/openpatch-extension-v0.3.0.zip`.
 2. Unzip it, open `chrome://extensions`, enable Developer mode, and load the folder unpacked.
 3. Start or open the public CivicApply demo URL.
 4. At 390px, observe horizontal overflow and the blocking survey.
@@ -106,7 +108,7 @@ Open the extension popup. Point out the exact website, policy-checked patch, per
 
 **2:08–2:32 — Community loop**
 
-Show the registry landing page. “The AI is only needed once, when a patch is authored. Everyone else gets the repair with one click—no AI, account, or API key.” Show domain scope and breakage health.
+Show the registry landing page and download the safe patch. On its target page, choose it in OpenPatch and flash the independent policy, scope, 19/19 live-selector, and SHA-256 receipt before installation. “The AI is only needed once, when a patch is authored. Everyone else gets the repair without AI, an account, or an API key.”
 
 **2:32–2:45 — Close**
 
@@ -115,7 +117,7 @@ Show the registry landing page. “The AI is only needed once, when a patch is a
 ## Submission checklist
 
 - [ ] Deploy the landing page and CivicApply demo to a stable public URL
-- [ ] Upload `release/openpatch-extension-v0.2.0.zip` and `release/openpatch-codex-plugin-v0.2.0.zip` to a stable public download or GitHub release
+- [ ] Upload `release/openpatch-extension-v0.3.0.zip` and `release/openpatch-codex-plugin-v0.2.0.zip` to a stable public download or GitHub release
 - [ ] Attach the validated Codex plugin package and mention the repo-discovered skill path
 - [ ] Make the repository public under the MIT license, or share private access with the required judge accounts
 - [ ] Add repository URL to Devpost

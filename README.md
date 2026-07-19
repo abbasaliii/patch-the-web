@@ -22,6 +22,8 @@ OpenPatch applies 19 declarative operations that:
 
 On any page without a community patch, the extension can also create a **privacy-safe Repair Brief** for Codex. It includes the exact origin and path, viewport geometry, structural counts, accessibility signals, and bounded selector candidates—but never field values, cookies, storage, URL queries, or page text.
 
+OpenPatch v0.3 closes the community loop: download any `.openpatch.json`, open its target page, and choose the file in the extension. Before installation, the extension validates the DSL, confirms the current URL is in scope, preflights every operation against the live DOM, computes a SHA-256 receipt, displays the exact capabilities, and requests Chrome access only for the declared domains. A failed selector or policy check blocks installation.
+
 The validator reports **19/19 healthy operations**, **10/10 publication assertions**, and a SHA-256 publication receipt. Local drafts expire automatically after 24 hours.
 
 | Before — fixed-width form and blocking survey | After — repaired, accessible, locally saved |
@@ -51,9 +53,9 @@ Requirements: Node.js 22+ and Chrome/Chromium.
 
 Prebuilt artifacts:
 
-- `release/openpatch-extension-v0.2.0.zip` — load-unpacked Chrome extension
+- `release/openpatch-extension-v0.3.0.zip` — load-unpacked Chrome extension
 - `release/openpatch-codex-plugin-v0.2.0.zip` — validated Codex plugin package
-- Extension SHA-256: `4CD1F70F80D69A0D5C0C7DBB9E9F0412687ED2C81C0B20E710525C59245BC52A`
+- Extension SHA-256: `20009248DAC41BD075FB502FBF37C9441F144CC54C64A8F27C8FD3A576B42698`
 - Plugin SHA-256: `ADDD9D9AFAB4CF9FB70DA19BBF6B170E0DA015B762EE333AF9051605D0054DB1`
 
 ```bash
@@ -64,7 +66,7 @@ npm run dev -- --port 5173
 
 Then:
 
-1. Unzip `release/openpatch-extension-v0.2.0.zip`.
+1. Unzip `release/openpatch-extension-v0.3.0.zip`.
 2. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the unzipped folder.
 3. Open `http://localhost:5173/demo/`.
 4. Try the broken form at a narrow viewport, enter sample data, and choose **Simulate timeout now**.
@@ -85,6 +87,15 @@ The same skill is packaged as a distributable Codex plugin under `plugins/openpa
 
 ![OpenPatch privacy-safe Repair Brief authoring UI](submission-assets/openpatch-repair-brief.png)
 
+### Test community installation
+
+1. Open the registry home page and choose **Download safe patch**.
+2. Open the patch's target page.
+3. Open OpenPatch, choose the downloaded `.openpatch.json` under **Install or update a community patch**, and inspect the policy, scope, selector-health, and SHA-256 receipt.
+4. Choose **Install and activate repair**, approve Chrome's exact-domain prompt, and watch the page reload with the repair active.
+
+Imported patches are stored locally, run through the same constrained runtime, and can replace an older version only when their semantic version is equal or newer. Invalid stored entries are ignored rather than executed.
+
 ### Supported platforms
 
 - Extension: Chrome/Chromium 120+ on Windows, macOS, and Linux; the release candidate is tested with Playwright Chromium.
@@ -98,13 +109,17 @@ npx tsc --noEmit
 npm test
 npm run validate:patch
 npm run test:browser
+npm run test:extension
 npm run build
+# or run the entire release gate:
+npm run verify
 ```
 
 Current results:
 
-- 12/12 unit tests pass
+- 21/21 unit, policy, registry, preflight, runtime, and privacy tests pass
 - 6/6 desktop and 390px browser tests pass
+- 1/1 production Manifest V3 extension integration test passes with a dynamically installed patch
 - 19/19 constrained operations apply
 - 10/10 publication assertions pass
 - Production site and Manifest V3 extension build successfully
@@ -164,7 +179,7 @@ This project was created during the Build Week submission period in a single cor
 
 **Where GPT‑5.6 through Codex accelerated the work:** translating the concept into a judge-focused vertical slice; scaffolding the Manifest V3 extension and public registry; implementing and threat-modeling the DSL; authoring the CivicApply repair; building the privacy-safe extension-to-Codex Repair Brief; packaging the official repo skill and plugin; building unit and browser tests; running responsive visual QA; and turning browser failures into concrete layout and test-fixture fixes.
 
-**Key joint tradeoff:** the hackathon MVP publishes one real, fully tested community patch instead of pretending a production-scale catalog already exists. The deployed registry is a genuine machine-readable endpoint with a version, scope, downloadable patch, operation/assertion counts, and SHA-256 receipt. Remote extension sync, publisher signing, moderation, and revocation remain explicit next milestones.
+**Key joint tradeoff:** the hackathon MVP publishes one real, fully tested community patch instead of pretending a production-scale catalog already exists. The registry is a genuine machine-readable endpoint with a version, scope, downloadable patch, operation/assertion counts, and SHA-256 receipt; the extension can now validate and install downloaded community patches on their exact domains. Automatic remote discovery, publisher signing, moderation, and revocation remain explicit next milestones.
 
 Before final Devpost submission, the project thread's `/feedback` Codex Session ID will be added to the submission as required.
 
@@ -173,6 +188,7 @@ Before final Devpost submission, the project thread's `/feedback` Codex Session 
 OpenPatch treats patches, websites, registry metadata, and page content as untrusted.
 
 - Exact host and narrow path matching happens before execution.
+- Imported patches are policy-validated and live-selector-preflighted before Chrome requests exact-domain access.
 - Operations are parsed into typed built-ins; patch code is never evaluated.
 - CSS properties and attributes use allowlists.
 - Critical singleton targets fail closed when selector counts drift.
@@ -182,7 +198,7 @@ OpenPatch treats patches, websites, registry metadata, and page content as untru
 - Patches never replace the site's actual authentication, submission, or server validation.
 - Repair Briefs exclude values, cookies, storage, query strings, and page text before anything is copied to Codex.
 
-The current MVP bundles its registry entry with the extension. Production registry transport, publisher signatures, moderation, and revocation are explicit next milestones.
+The current MVP bundles one default repair and supports validated local installation from the public registry. Automatic registry sync, publisher signatures, moderation, and revocation are explicit next milestones.
 
 ## License
 

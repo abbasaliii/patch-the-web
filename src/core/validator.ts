@@ -81,8 +81,10 @@ const SAFE_ATTRIBUTE = /^(aria-[a-z-]+|role|tabindex|autocomplete|inputmode|titl
 const SAFE_ID = /^[a-z0-9][a-z0-9._-]{2,79}$/;
 const SAFE_VERSION = /^\d+\.\d+\.\d+(?:-[a-z0-9.-]+)?$/i;
 const SAFE_HOST = /^(localhost|127\.0\.0\.1|(?:\*\.)?[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+)$/i;
+const SAFE_PATH = /^\/[a-z0-9._~!$&'()+,;=:@%/-]*\*?$/i;
 const UNSAFE_VALUE = /(javascript\s*:|expression\s*\(|url\s*\(|@import|<\/?script|onerror\s*=|onload\s*=)/i;
-const UNSAFE_SELECTOR = /(^|[\s,>+~])(?:html|head|body|\*)(?:$|[\s,>+~.#[:])/i;
+const UNSAFE_SELECTOR = /(^|[\s,>+~])(?:html|head|body|\*)(?:$|[\s,>+~.#[:])|:root\b|:(?:is|where|not|has)\([^)]*\*/i;
+const UNSAFE_PATTERN = /(\\[1-9]|\(\?[=!<]|\([^)]*[+*][^)]*\)[+*?{])/;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -219,6 +221,13 @@ function checkOperation(value: unknown, index: number, issues: ValidationIssue[]
             }
             if (rule.kind === "pattern" && (!text(rule.value, 120) || UNSAFE_VALUE.test(String(rule.value)))) {
               issues.push({ path: `${rulePath}.value`, message: "must be a safe regular expression" });
+            } else if (rule.kind === "pattern") {
+              try {
+                if (UNSAFE_PATTERN.test(String(rule.value))) throw new Error("unsafe pattern");
+                new RegExp(String(rule.value));
+              } catch {
+                issues.push({ path: `${rulePath}.value`, message: "must be a bounded regular expression without lookarounds, backreferences, or nested quantifiers" });
+              }
             }
           }
         });
@@ -246,6 +255,7 @@ export function validatePatch(value: unknown): ValidationResult {
   if (!text(value.summary, 240)) issues.push({ path: "summary", message: "must be 1-240 characters" });
   if (!text(value.version, 40) || !SAFE_VERSION.test(String(value.version))) issues.push({ path: "version", message: "must be semantic version syntax" });
   if (!isRecord(value.author) || !text(value.author.name, 80)) issues.push({ path: "author.name", message: "must identify the patch author" });
+  else if (value.author.verified !== undefined && typeof value.author.verified !== "boolean") issues.push({ path: "author.verified", message: "must be a boolean when provided" });
   if (!isRecord(value.match)) {
     issues.push({ path: "match", message: "must define exact hosts and paths" });
   } else {
@@ -260,8 +270,8 @@ export function validatePatch(value: unknown): ValidationResult {
       issues.push({ path: "match.paths", message: "must list 1-20 pathname patterns" });
     } else {
       value.match.paths.forEach((path, index) => {
-        if (typeof path !== "string" || !path.startsWith("/") || path.includes("..") || /[?#]/.test(path)) {
-          issues.push({ path: `match.paths[${index}]`, message: "must be a safe pathname pattern" });
+        if (typeof path !== "string" || !SAFE_PATH.test(path) || path.includes("..") || path.slice(0, -1).includes("*")) {
+          issues.push({ path: `match.paths[${index}]`, message: "must be a safe pathname with at most one final wildcard" });
         }
       });
     }
@@ -288,6 +298,30 @@ export function validatePatch(value: unknown): ValidationResult {
   }
   if (!Array.isArray(value.verify) || value.verify.length === 0) {
     warnings.push({ path: "verify", message: "published patches should include selector assertions" });
+  } else if (value.verify.length > 50) {
+    issues.push({ path: "verify", message: "must contain no more than 50 assertions" });
+  } else {
+    value.verify.forEach((assertion, index) => {
+      const path = `verify[${index}]`;
+      if (!isRecord(assertion) || !["exists", "attribute"].includes(String(assertion.type))) {
+        issues.push({ path, message: "must be an exists or attribute assertion" });
+        return;
+      }
+      checkSelector(assertion.selector, `${path}.selector`, issues);
+      if (assertion.type === "exists") {
+        for (const bound of ["min", "max"] as const) {
+          if (assertion[bound] !== undefined && (!Number.isInteger(assertion[bound]) || Number(assertion[bound]) < 0 || Number(assertion[bound]) > 100)) {
+            issues.push({ path: `${path}.${bound}`, message: "must be an integer between 0 and 100" });
+          }
+        }
+        if (typeof assertion.min === "number" && typeof assertion.max === "number" && assertion.min > assertion.max) {
+          issues.push({ path, message: "minimum selector count may not exceed maximum" });
+        }
+      } else {
+        if (!text(assertion.name, 80) || !/^[a-z][a-z0-9:._-]*$/i.test(String(assertion.name))) issues.push({ path: `${path}.name`, message: "must be a safe attribute name" });
+        if (typeof assertion.value !== "string" || assertion.value.length > 240 || UNSAFE_VALUE.test(assertion.value)) issues.push({ path: `${path}.value`, message: "must be a safe assertion value" });
+      }
+    });
   }
   if (!text(value.changelog, 500)) issues.push({ path: "changelog", message: "must describe this version" });
 

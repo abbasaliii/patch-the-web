@@ -63,4 +63,9 @@ test("the public registry exposes a verifiable patch receipt", async ({ page }) 
   expect(registry.patches[0].sha256).toMatch(/^[a-f0-9]{64}$/);
   expect(registry.patches[0].verification).toEqual({ status: "verified", operations: 19, assertions: 10 });
   await expect(page.locator("#registry-receipt")).toContainText("SHA-256");
+  const download = page.getByRole("link", { name: "Download safe patch ↓" });
+  await expect(download).toHaveAttribute("download", "");
+  const patchResponse = await page.request.get("/registry/patches/civic-apply.openpatch.json");
+  expect(patchResponse.ok()).toBe(true);
+  expect((await patchResponse.json()).schemaVersion).toBe(1);
 });

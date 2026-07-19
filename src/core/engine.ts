@@ -282,12 +282,14 @@ export function applyPatch(
   const marker = `${patch.id}@${patch.version}`;
   installTrustedUiStyles(documentRef);
   const root = documentRef.documentElement;
-  if (root.dataset.openpatchApplied === marker) {
+  const appliedMarkers = new Set((root.dataset.openpatchApplied ?? "").split(/\s+/).filter(Boolean));
+  if (appliedMarkers.has(marker)) {
     return { patchId: patch.id, version: patch.version, applied: true, operations: [], healthy: patch.operations.length, total: patch.operations.length, timestamp: Date.now() };
   }
   const operations = patch.operations.map((operation) => applyOperation(patch, operation, { document: documentRef, window: windowRef, storage: storageRef }));
   const healthy = operations.filter((operation) => operation.applied).length;
-  root.dataset.openpatchApplied = marker;
+  appliedMarkers.add(marker);
+  root.dataset.openpatchApplied = [...appliedMarkers].join(" ");
   root.classList.add("openpatch-active");
   return {
     patchId: patch.id,

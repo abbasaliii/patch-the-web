@@ -43,12 +43,7 @@
           <span class="verified" id="publisher-status">✓ Policy checked</span>
         </div>
 
-        <div class="repair-list" aria-label="Repair capabilities">
-          <span>Responsive layout</span>
-          <span>Local autosave</span>
-          <span>Accessible errors</span>
-          <span>Keyboard controls</span>
-        </div>
+        <div class="repair-list" id="repair-list" aria-label="Repair capabilities"></div>
 
         <div class="health-row" id="health-row">
           <span class="health-icon">✓</span>
@@ -83,6 +78,26 @@
         <button class="author-button" id="author-button" type="button"><span aria-hidden="true">✦</span> Copy Codex repair brief</button>
         <p class="privacy-note">Structural signals only — never field values, cookies, storage, or URL queries.</p>
         <p class="brief-status" id="brief-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <div class="flow-divider"><span>Install or update a community patch</span></div>
+      <section class="install-flow" aria-labelledby="install-title">
+        <span class="eyebrow">Install without AI</span>
+        <h2 id="install-title">Check a patch on this page</h2>
+        <p>OpenPatch validates the file and every selector before requesting access to its exact domains.</p>
+        <input id="patch-file" class="file-input" type="file" accept="application/json,.json,.openpatch.json" />
+        <label class="import-button" for="patch-file">Choose .openpatch.json</label>
+        <div class="import-preview" id="import-preview" hidden>
+          <div class="import-head"><span class="import-check">✓</span><div><strong id="import-name"></strong><small id="import-version"></small></div></div>
+          <dl>
+            <div><dt>Scope</dt><dd id="import-scope"></dd></div>
+            <div><dt>Permissions</dt><dd id="import-capabilities"></dd></div>
+            <div><dt>Preflight</dt><dd id="import-health"></dd></div>
+            <div><dt>SHA-256</dt><dd id="import-hash"></dd></div>
+          </dl>
+          <button class="install-button" id="install-button" type="button">Install and activate repair</button>
+        </div>
+        <p class="import-status" id="import-status" role="status" aria-live="polite"></p>
       </section>
     </main>
 

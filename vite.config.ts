@@ -1,31 +1,27 @@
 import { createHash } from "node:crypto";
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
+import { validatePatch } from "./src/core/validator";
 
 const root = __dirname;
 const siteOut = resolve(root, "dist/site");
-const patchFile = "civic-apply.openpatch.json";
+const patchSourceDir = resolve(root, "src/registry/patches");
 
 async function loadRegistryArtifacts() {
-  const sourcePath = resolve(root, "src/registry/patches", patchFile);
-  const raw = await readFile(sourcePath, "utf8");
-  const patch = JSON.parse(raw) as {
-    id: string;
-    name: string;
-    summary: string;
-    version: string;
-    author: { name: string; verified?: boolean };
-    match: { hosts: string[]; paths: string[] };
-    capabilities: string[];
-    operations: unknown[];
-    verify: unknown[];
-    changelog: string;
-  };
+  const patchFiles = (await readdir(patchSourceDir)).filter((file) => file.endsWith(".openpatch.json")).sort();
+  const artifacts = await Promise.all(patchFiles.map(async (fileName) => {
+    const sourcePath = resolve(patchSourceDir, fileName);
+    const raw = await readFile(sourcePath, "utf8");
+    const validation = validatePatch(JSON.parse(raw) as unknown);
+    if (!validation.ok) throw new Error(`${fileName} failed registry policy validation: ${validation.issues.map((issue) => `${issue.path} ${issue.message}`).join("; ")}`);
+    const patch = validation.patch;
+    return { fileName, sourcePath, raw, patch };
+  }));
   const registry = {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
-    patches: [{
+    patches: artifacts.map(({ fileName, raw, patch }) => ({
       id: patch.id,
       name: patch.name,
       summary: patch.summary,
@@ -33,7 +29,7 @@ async function loadRegistryArtifacts() {
       author: patch.author,
       scope: patch.match,
       capabilities: patch.capabilities,
-      download: `/registry/patches/${patchFile}`,
+      download: `/registry/patches/${fileName}`,
       sha256: createHash("sha256").update(raw).digest("hex"),
       verification: {
         status: "verified",
@@ -41,9 +37,9 @@ async function loadRegistryArtifacts() {
         assertions: patch.verify.length
       },
       changelog: patch.changelog
-    }]
+    }))
   };
-  return { sourcePath, raw, registry };
+  return { artifacts, registry };
 }
 
 const registryPlugin: Plugin = {
@@ -51,23 +47,34 @@ const registryPlugin: Plugin = {
   configureServer(server) {
     server.middlewares.use(async (request, response, next) => {
       const pathname = request.url?.split("?", 1)[0];
-      if (pathname !== "/registry/index.json" && pathname !== `/registry/patches/${patchFile}`) return next();
+      if (pathname !== "/registry/index.json" && !pathname?.startsWith("/registry/patches/")) return next();
       try {
-        const artifacts = await loadRegistryArtifacts();
+        const registryArtifacts = await loadRegistryArtifacts();
         response.statusCode = 200;
         response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.end(pathname === "/registry/index.json" ? JSON.stringify(artifacts.registry, null, 2) : artifacts.raw);
+        if (pathname === "/registry/index.json") {
+          response.end(JSON.stringify(registryArtifacts.registry, null, 2));
+          return;
+        }
+        const fileName = pathname?.slice("/registry/patches/".length);
+        const artifact = registryArtifacts.artifacts.find((entry) => entry.fileName === fileName);
+        if (!artifact) {
+          response.statusCode = 404;
+          response.end(JSON.stringify({ error: "Patch not found" }));
+          return;
+        }
+        response.end(artifact.raw);
       } catch (error) {
         next(error as Error);
       }
     });
   },
   async closeBundle() {
-    const { sourcePath, registry } = await loadRegistryArtifacts();
+    const { artifacts, registry } = await loadRegistryArtifacts();
     const registryDir = resolve(siteOut, "registry");
     const patchDir = resolve(registryDir, "patches");
     await mkdir(patchDir, { recursive: true });
-    await copyFile(sourcePath, resolve(patchDir, patchFile));
+    await Promise.all(artifacts.map((artifact) => copyFile(artifact.sourcePath, resolve(patchDir, artifact.fileName))));
     await writeFile(resolve(registryDir, "index.json"), JSON.stringify(registry, null, 2));
   }
 };

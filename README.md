@@ -22,6 +22,10 @@ OpenPatch applies 19 declarative operations that:
 
 The validator reports **19/19 healthy operations** and a SHA-256 publication receipt.
 
+| Before — fixed-width form and blocking survey | After — repaired, accessible, locally saved |
+| --- | --- |
+| ![Broken CivicApply form at 390px](submission-assets/civicapply-before-mobile.png) | ![OpenPatched CivicApply form at 390px](submission-assets/civicapply-after-mobile.png) |
+
 ## Why this is different
 
 User-script tools can already inject arbitrary JavaScript. OpenPatch deliberately cannot.

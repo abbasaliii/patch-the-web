@@ -20,7 +20,7 @@ OpenPatch applies 19 declarative operations that:
 - Move help into the application workflow
 - Remove the blocking survey and contradictory native save state
 
-The validator reports **19/19 healthy operations** and a SHA-256 publication receipt.
+The validator reports **19/19 healthy operations**, **10/10 publication assertions**, and a SHA-256 publication receipt. Local drafts expire automatically after 24 hours.
 
 | Before — fixed-width form and blocking survey | After — repaired, accessible, locally saved |
 | --- | --- |
@@ -77,10 +77,10 @@ npm run build
 
 Current results:
 
-- 8/8 unit tests pass
+- 10/10 unit tests pass
 - 4/4 desktop and 390px browser tests pass
 - 19/19 constrained operations apply
-- 4/4 publication assertions pass
+- 10/10 publication assertions pass
 - Production site and Manifest V3 extension build successfully
 
 Browser tests prove both states: the original portal must be broken, and the patched portal must fit the viewport, restore a local draft after reload, expose specific accessible errors, and support arrow-key focus movement.
@@ -117,7 +117,8 @@ Every patch declares an exact host/path scope, plain-language capabilities, cons
       "selector": "#benefits-form",
       "key": "housing-support-draft-v1",
       "include": ["input", "select", "textarea"],
-      "statusText": "Draft saved on this device"
+      "ttlMinutes": 1440,
+      "statusText": "Draft saved on this device for 24 hours"
     }
   ]
 }

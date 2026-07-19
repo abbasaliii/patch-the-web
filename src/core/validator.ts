@@ -185,6 +185,9 @@ function checkOperation(value: unknown, index: number, issues: ValidationIssue[]
     } else {
       value.include.forEach((selector, i) => checkSelector(selector, `${base}.include[${i}]`, issues));
     }
+    if (!Number.isInteger(value.ttlMinutes) || Number(value.ttlMinutes) < 5 || Number(value.ttlMinutes) > 10080) {
+      issues.push({ path: `${base}.ttlMinutes`, message: "must expire drafts between 5 minutes and 7 days" });
+    }
     if (!text(value.statusText, 120)) {
       issues.push({ path: `${base}.statusText`, message: "must be concise visible status text" });
     }

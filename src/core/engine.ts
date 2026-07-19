@@ -106,10 +106,20 @@ function setupPersistence(
   try {
     const raw = storage.getItem(storageKey);
     if (raw) {
-      const snapshot = JSON.parse(raw) as Record<string, unknown>;
-      uniqueFields.forEach((field, index) => writeField(field, snapshot[fieldKey(field, index)]));
-      status.textContent = `Draft restored · ${operation.statusText}`;
-      restored = true;
+      const stored = JSON.parse(raw) as { savedAt?: unknown; values?: unknown };
+      const savedAt = typeof stored.savedAt === "number" ? stored.savedAt : 0;
+      const expired = Date.now() - savedAt > operation.ttlMinutes * 60_000;
+      const values = stored.values && typeof stored.values === "object" && !Array.isArray(stored.values)
+        ? stored.values as Record<string, unknown>
+        : null;
+      if (expired || !values) {
+        storage.removeItem(storageKey);
+        status.textContent = `Previous draft expired · ${operation.statusText}`;
+      } else {
+        uniqueFields.forEach((field, index) => writeField(field, values[fieldKey(field, index)]));
+        status.textContent = `Draft restored · ${operation.statusText}`;
+        restored = true;
+      }
     }
   } catch {
     status.textContent = "Local draft storage is unavailable";
@@ -121,7 +131,7 @@ function setupPersistence(
       snapshot[fieldKey(field, index)] = readField(field);
     });
     try {
-      storage.setItem(storageKey, JSON.stringify(snapshot));
+      storage.setItem(storageKey, JSON.stringify({ savedAt: Date.now(), values: snapshot }));
       status.textContent = operation.statusText;
       status.dataset.state = "saved";
     } catch {

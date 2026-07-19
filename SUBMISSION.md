@@ -45,9 +45,9 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 ### Accomplishments
 
 - 19/19 operations healthy
-- 8/8 security and runtime tests passing
+- 10/10 security and runtime tests passing
 - 4/4 desktop and mobile browser tests passing
-- 4/4 publishing assertions passing
+- 10/10 publishing assertions passing
 - A working no-account, no-API-key extension flow
 - A validated Codex skill that turns complaints into test-gated patches
 
@@ -89,7 +89,7 @@ Show the `$openpatch-author` skill, the complaint, the DOM/selector evidence, an
 
 **1:22–2:08 — Visible repair**
 
-Open the extension popup. Point out the exact website, permission list, verified publisher, and selector health. Enable the patch. Show the single-column layout and removed survey. Fill the form, simulate timeout, and show “Draft restored.” Enter an invalid email and show the specific accessible message. Use arrow keys on progress steps.
+Open the extension popup. Point out the exact website, policy-checked patch, permission list, and selector health. Enable the patch. Show the single-column layout and removed survey. Fill the form, simulate timeout, and show “Draft restored.” Enter an invalid email and show the specific accessible message. Use arrow keys on progress steps.
 
 **2:08–2:32 — Community loop**
 

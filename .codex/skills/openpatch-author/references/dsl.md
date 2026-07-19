@@ -92,11 +92,12 @@ Store non-sensitive matched form values in origin-local storage. The runtime alw
   "selector": "#application-form",
   "key": "application-draft-v1",
   "include": ["input", "select", "textarea"],
-  "statusText": "Draft saved on this device"
+  "ttlMinutes": 1440,
+  "statusText": "Draft saved on this device for 24 hours"
 }
 ```
 
-Capability: `local-storage`. The form selector must match exactly one form.
+Capability: `local-storage`. The form selector must match exactly one form. Draft expiry is mandatory and must be between 5 minutes and 7 days; use the shortest period that still solves the complaint.
 
 ### `validation`
 

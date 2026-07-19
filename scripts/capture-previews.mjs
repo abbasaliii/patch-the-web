@@ -25,7 +25,8 @@ try {
   await mobile.screenshot({ path: resolve(previewDir, "civicapply-before-mobile.png") });
   await mobile.addScriptTag({ path: runtimePath });
   await mobile.evaluate(() => window.__applyOpenPatchDemo());
-  await mobile.screenshot({ path: resolve(previewDir, "civicapply-after-mobile.png"), fullPage: true });
+  await mobile.screenshot({ path: resolve(previewDir, "civicapply-after-mobile.png") });
+  await mobile.screenshot({ path: resolve(previewDir, "civicapply-after-mobile-full.png"), fullPage: true });
 } finally {
   await browser.close();
   await server.close();

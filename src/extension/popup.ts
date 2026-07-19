@@ -41,6 +41,7 @@ function renderState(state: PageState) {
   byId("patch-version").textContent = `v${state.patch.version}`;
   byId("patch-summary").textContent = state.patch.summary;
   byId("patch-author").textContent = state.patch.author.name;
+  byId("publisher-status").textContent = state.patch.author.verified ? "✓ Verified publisher" : "✓ Policy checked";
   toggle.checked = state.enabled;
   byId("toggle-title").textContent = state.enabled ? "Repair is active" : "Apply this repair";
   byId("permissions-list").replaceChildren(...state.patch.capabilities.map((capability) => {

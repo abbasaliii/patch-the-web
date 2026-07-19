@@ -3,11 +3,11 @@
   "id": "org.openpatch.civicapply-accessible-draft",
   "name": "CivicApply: accessible & autosaved",
   "summary": "Repairs the mobile application flow, preserves unfinished progress, adds accessible validation, and removes the obstructive survey.",
-  "version": "1.0.0",
-  "author": { "name": "OpenPatch Community", "verified": true },
+  "version": "1.1.0",
+  "author": { "name": "OpenPatch Community", "verified": false },
   "match": {
     "hosts": ["localhost", "127.0.0.1"],
-    "paths": ["/demo/*", "/demo/"]
+    "paths": ["/demo/*"]
   },
   "capabilities": [
     "layout",
@@ -77,11 +77,18 @@
       }
     },
     {
-      "id": "mobile-hide-agency-nav",
+      "id": "mobile-preserve-agency-nav",
       "type": "style",
       "selector": ".government-header nav",
       "when": { "maxWidth": 760 },
-      "styles": { "display": "none" }
+      "styles": {
+        "display": "flex",
+        "order": "3",
+        "width": "100%",
+        "margin-left": "0",
+        "overflow-x": "auto",
+        "padding-bottom": "10px"
+      }
     },
     {
       "id": "mobile-content-width",
@@ -140,15 +147,9 @@
       "type": "attributes",
       "selector": "#progress-steps",
       "attributes": {
-        "role": "tablist",
+        "role": "group",
         "aria-label": "Application progress"
       }
-    },
-    {
-      "id": "progress-tabs",
-      "type": "attributes",
-      "selector": "#progress-steps button",
-      "attributes": { "role": "tab" }
     },
     {
       "id": "progress-keyboard",
@@ -178,12 +179,19 @@
       }
     },
     {
+      "id": "label-other-required-fields",
+      "type": "attributes",
+      "selector": "#household-size, #address",
+      "attributes": { "aria-required": "true" }
+    },
+    {
       "id": "persist-draft",
       "type": "persistForm",
       "selector": "#benefits-form",
       "key": "housing-support-draft-v1",
       "include": ["input", "select", "textarea"],
-      "statusText": "Draft saved on this device"
+      "ttlMinutes": 1440,
+      "statusText": "Draft saved on this device for 24 hours"
     },
     {
       "id": "accessible-validation",
@@ -221,9 +229,15 @@
   ],
   "verify": [
     { "type": "exists", "selector": "#benefits-form", "min": 1, "max": 1 },
-    { "type": "exists", "selector": ".survey-wall", "min": 1, "max": 1 },
     { "type": "exists", "selector": "#progress-steps button", "min": 3, "max": 3 },
-    { "type": "attribute", "selector": "#email", "name": "aria-required", "value": "true" }
+    { "type": "exists", "selector": ".help-card", "min": 1, "max": 1 },
+    { "type": "exists", "selector": ".openpatch-save-status", "min": 1, "max": 1 },
+    { "type": "attribute", "selector": ".survey-wall", "name": "aria-hidden", "value": "true" },
+    { "type": "attribute", "selector": ".draft-badge", "name": "aria-hidden", "value": "true" },
+    { "type": "attribute", "selector": "#progress-steps", "name": "role", "value": "group" },
+    { "type": "attribute", "selector": "#email", "name": "aria-required", "value": "true" },
+    { "type": "attribute", "selector": "#household-size", "name": "aria-required", "value": "true" },
+    { "type": "attribute", "selector": "#address", "name": "aria-required", "value": "true" }
   ],
-  "changelog": "Initial community repair: responsive layout, draft recovery, keyboard progress navigation, accessible field errors, and removal of the blocking survey."
+  "changelog": "Hardened community repair: preserve mobile agency navigation, complete required-field semantics, add 24-hour draft expiry, and expand publication assertions."
 }

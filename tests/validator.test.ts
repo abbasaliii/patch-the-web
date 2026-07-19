@@ -35,4 +35,13 @@ describe("OpenPatch policy validator", () => {
     expect(patchMatchesUrl(patch, new URL("http://localhost/bank/"))).toBe(false);
     expect(patchMatchesUrl(patch, new URL("https://example.com/demo/"))).toBe(false);
   });
+
+  it("requires a bounded local-draft retention period", () => {
+    const unsafe = structuredClone(civicPatch) as typeof civicPatch;
+    const persistence = unsafe.operations.find((operation) => operation.type === "persistForm") as { ttlMinutes: number };
+    persistence.ttlMinutes = 0;
+    const result = validatePatch(unsafe);
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.issues.some((issue) => issue.path.endsWith("ttlMinutes"))).toBe(true);
+  });
 });

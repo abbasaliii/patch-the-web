@@ -13,6 +13,9 @@ test("the unpatched portal is visibly broken", async ({ page }, testInfo) => {
 });
 
 test("the safe patch repairs layout, accessibility, autosave, and keyboard behavior", async ({ page }, testInfo) => {
+  const runtimeErrors: string[] = [];
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+  page.on("console", (message) => { if (message.type() === "error") runtimeErrors.push(message.text()); });
   await page.goto("/demo/");
   await page.addScriptTag({ path: runtimePath });
   const health = await page.evaluate(() => (window as Window & { __applyOpenPatchDemo: () => { healthy: number; total: number } }).__applyOpenPatchDemo());
@@ -20,7 +23,7 @@ test("the safe patch repairs layout, accessibility, autosave, and keyboard behav
   expect(health.healthy).toBe(health.total);
   await expect(page.locator(".survey-wall")).toBeHidden();
   await expect(page.locator(".application-main > .help-card")).toBeVisible();
-  await expect(page.locator("#progress-steps")).toHaveAttribute("role", "tablist");
+  await expect(page.locator("#progress-steps")).toHaveAttribute("role", "group");
 
   if (testInfo.project.name === "mobile-chromium") {
     const documentFits = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 2);
@@ -46,4 +49,5 @@ test("the safe patch repairs layout, accessibility, autosave, and keyboard behav
   await firstStep.focus();
   await firstStep.press("ArrowRight");
   await expect(secondStep).toBeFocused();
+  expect(runtimeErrors).toEqual([]);
 });

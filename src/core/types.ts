@@ -42,6 +42,7 @@ export type PersistFormOperation = {
   selector: string;
   key: string;
   include: string[];
+  ttlMinutes: number;
   statusText: string;
 };
 

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { applyPatch } from "../src/core/engine";
 import civicPatchJson from "../src/registry/patches/civic-apply.openpatch.json";
 import type { OpenPatch } from "../src/core/types";
@@ -37,7 +37,7 @@ describe("constrained patch runtime", () => {
     expect(health.healthy).toBe(health.total);
     expect((document.querySelector(".survey-wall") as HTMLElement).hidden).toBe(true);
     expect(document.querySelector(".application-main > .help-card")).not.toBeNull();
-    expect(document.getElementById("progress-steps")?.getAttribute("role")).toBe("tablist");
+    expect(document.getElementById("progress-steps")?.getAttribute("role")).toBe("group");
   });
 
   it("saves and restores unfinished form progress locally", () => {
@@ -47,6 +47,24 @@ describe("constrained patch runtime", () => {
     name.dispatchEvent(new Event("input", { bubbles: true }));
     const saved = [...Object.keys(localStorage)].map((key) => localStorage.getItem(key)).join(" ");
     expect(saved).toContain("Alex Morgan");
+  });
+
+  it("expires locally stored drafts after the declared retention window", () => {
+    const now = 1_800_000_000_000;
+    const dateNow = vi.spyOn(Date, "now").mockReturnValue(now);
+    applyPatch(civicPatchJson as OpenPatch);
+    const name = document.getElementById("full-name") as HTMLInputElement;
+    name.value = "Alex Morgan";
+    name.dispatchEvent(new Event("input", { bubbles: true }));
+
+    document.documentElement.removeAttribute("data-openpatch-applied");
+    document.documentElement.className = "";
+    document.body.innerHTML = fixture;
+    dateNow.mockReturnValue(now + (24 * 60 + 1) * 60_000);
+    applyPatch(civicPatchJson as OpenPatch);
+
+    expect((document.getElementById("full-name") as HTMLInputElement).value).toBe("");
+    expect(document.querySelector(".openpatch-save-status")?.textContent).toContain("expired");
   });
 
   it("adds specific accessible validation messages", () => {

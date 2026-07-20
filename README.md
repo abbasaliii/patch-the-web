@@ -141,7 +141,7 @@ npm run verify
 Current results:
 
 - 43/43 unit, policy, registry-discovery, compatibility-quarantine, preflight, runtime, and privacy tests pass
-- 14/14 desktop and 390px browser journeys pass, including the zero-install judge preview and interactive quarantine console
+- 20/20 desktop and 390px browser journeys pass, including six strict automated WCAG A/AA scans across both patched products, the landing page, and Compatibility Sentinel
 - 4/4 Manifest V3 extension integration tests pass with a dynamically installed patch plus both real public demo domains
 - 11/11 flagship constrained operations apply; 19/19 CivicApply operations remain healthy
 - 10/10 flagship publication assertions pass; 10/10 CivicApply assertions remain healthy
@@ -149,7 +149,7 @@ Current results:
 - Public `/registry/index.json` and versioned patch download are generated with a SHA-256 receipt
 - Public `/registry/compatibility.json` exposes live-page fingerprints and per-operation health; a least-privilege, immutable-action GitHub workflow reruns it every six hours, retries transient failures, retains the full receipt, and promotes only quarantine or recovery transitions
 
-Browser tests prove both product claims: MetroCare starts as a realistic directory with no search, filters, or comparison, then privately combines access needs, compares providers, persists preferences, announces results, supports the keyboard, fits mobile, and emits no interaction requests; CivicApply still proves layout repair, local draft restoration, specific accessible errors, and arrow-key focus movement.
+Browser tests prove both product claims: MetroCare starts as a realistic directory with no search, filters, or comparison, then privately combines access needs, compares providers, persists preferences, announces results, supports the keyboard, fits mobile, and emits no interaction requests; CivicApply still proves layout repair, local draft restoration, specific accessible errors, and arrow-key focus movement. Axe audits the fully patched workflows and public product surfaces at WCAG A/AA tags on desktop and mobile, with zero automated violations.
 
 ## Repository map
 

@@ -1,6 +1,6 @@
 {
   "name": "openpatch",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "private": true,
   "type": "module",
   "description": "A safe, community repair layer for websites users do not own.",
@@ -23,6 +23,7 @@
     "verify": "npm run check && npm run validate:patch -- src/registry/patches/civic-apply.openpatch.json src/site/demo/index.html && npm run validate:patch -- src/registry/patches/metrocare-service-navigator.openpatch.json src/site/care/index.html && npm run test:browser && npm run test:extension"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
     "@playwright/test": "^1.55.0",
     "@types/chrome": "^0.1.1",
     "@types/jsdom": "^21.1.7",

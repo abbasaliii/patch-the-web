@@ -25,7 +25,7 @@ That separation is deliberate: AI handles ambiguous intent and iterative enginee
 | Repair genuinely missing capabilities | Replace the early form-only proof with a credible directory that works as designed but fails a real access need | Designed MetroCare, then authored `collectionFilter` and `collectionCompare` as trusted runtime primitives | `src/site/care/`, `src/core/engine.ts`, `src/registry/patches/metrocare-service-navigator.openpatch.json` |
 | Keep authoring context private | Never send field values, page text, cookies, storage, or URL queries to Codex | Built a bounded Repair Brief and tests that prove those exclusions | `src/extension/repair-brief.ts`, `tests/repair-brief.test.ts` |
 | Treat website drift as a product state | A community feature must stop being recommended when the original site changes underneath it | Built SHA-bound Chromium compatibility checks, per-operation fingerprints, quarantine behavior, and the public Sentinel | `scripts/check-registry-compatibility.ts`, `src/core/compatibility.ts`, `src/site/sentinel/` |
-| Prove privacy and accessibility behavior | Visual polish alone is not evidence | Added assertions for focus movement, ARIA relationships, selection limits, mobile width, persistence, and zero interaction requests | `tests/browser/openpatch.spec.ts`, `tests/engine.test.ts`, `tests/extension/openpatch-extension.spec.ts` |
+| Prove privacy and accessibility behavior | Visual polish alone is not evidence | Added assertions for focus movement, ARIA relationships, selection limits, mobile width, persistence, zero interaction requests, and strict axe WCAG A/AA scans | `tests/browser/accessibility.spec.ts`, `tests/browser/openpatch.spec.ts`, `tests/engine.test.ts`, `tests/extension/openpatch-extension.spec.ts` |
 
 ## Dated milestone trail
 
@@ -43,6 +43,7 @@ The public Git history preserves the Build Week sequence:
 | Jul 20 | `v0.7.0` release | Private provider comparison, workspace compatibility receipts, final visual and release hardening |
 | Jul 20 | `v0.7.1` hotfix | Canonical cross-platform patch bytes prevent Windows/Linux SHA-256 receipt drift in production builds |
 | Jul 20 | `v0.7.2` hardening | Clean-install Linux CI plus six-hour live monitoring, retained receipts, retries, and automatic material quarantine/recovery promotion |
+| Jul 20 | `v0.7.3` accessibility | Automated WCAG A/AA audits across patched workflows and public surfaces, hardened contrast tokens, and a keyboard-focusable comparison region |
 
 ## Iteration examples
 
@@ -53,6 +54,7 @@ Codex did not merely scaffold files. The primary thread repeatedly used browser 
 - Public registry discovery initially proved metadata only. It was extended to verify exact patch bytes, live selector compatibility, scope, and Chrome permissions before installation.
 - Compatibility checks initially trusted an already-published patch. A workspace mode was added so candidate patch bytes are fingerprinted against the public target before registry publication.
 - The comparison feature received adversarial limits: one exact container, safe `data-*` attributes only, explicit display maps, 2–4 selected items, bounded fields and values, trusted native UI, focus transfer, live announcements, and no page-text or network access.
+- A strict axe scan exposed contrast regressions hidden by entrance-animation opacity and a scrollable comparison region missing keyboard focus. We corrected the source color system and focus semantics, then gated all patched and public surfaces at desktop and mobile widths.
 
 ## Reproduce the evidence
 
@@ -61,7 +63,7 @@ npm install
 npm run verify
 ```
 
-The release gate performs type checking, 43 unit/policy/privacy tests, both patch validators, 14 desktop/mobile browser journeys, and 4 packaged Manifest V3 extension tests—including public registry discovery and execution on the real production domain.
+The release gate performs type checking, 43 unit/policy/privacy tests, both patch validators, 20 desktop/mobile browser journeys (including six strict axe WCAG A/AA scans), and 4 packaged Manifest V3 extension tests—including public registry discovery and execution on the real production domain.
 
 Additional publication evidence:
 

@@ -122,6 +122,7 @@ function installTrustedUiStyles(document: Document) {
     .openpatch-compare__result { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.18); }
     .openpatch-compare__result-head { display: flex; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 13px; }
     .openpatch-compare__table-wrap { overflow-x: auto; border: 1px solid rgba(255,255,255,.15); border-radius: 12px; background: #fff; }
+    .openpatch-compare__table-wrap:focus-visible { outline: 3px solid #79e5b7; outline-offset: 3px; }
     .openpatch-compare table { width: 100%; min-width: 560px; border-collapse: collapse; color: #18372b; background: #fff; font-size: 11px; }
     .openpatch-compare th, .openpatch-compare td { padding: 11px 13px; border-bottom: 1px solid #e1ebe6; text-align: left; vertical-align: top; }
     .openpatch-compare thead th { color: #10392b; background: #eef8f3; font-size: 11px; }
@@ -537,6 +538,9 @@ function setupCollectionCompare(
   resultHead.append(resultCopy, close);
   const tableWrap = document.createElement("div");
   tableWrap.className = "openpatch-compare__table-wrap";
+  tableWrap.tabIndex = 0;
+  tableWrap.setAttribute("role", "region");
+  tableWrap.setAttribute("aria-label", "Scrollable service comparison");
   result.append(resultHead, tableWrap);
   panel.append(bar, liveStatus, result);
 

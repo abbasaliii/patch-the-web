@@ -28,6 +28,8 @@ The authoring workflow is technical, but the product's end user is a citizen, st
 
 ## Equal-weight judging strategy
 
+**Objective accessibility evidence:** 20/20 desktop and mobile browser journeys pass, including six strict axe scans over both fully patched workflows and both public product surfaces using WCAG A/AA rule tags, with zero automated violations.
+
 | Criterion | Evidence judges can see | Demo moment |
 | --- | --- | --- |
 | Technological Implementation | GPT‑5.6/Codex authoring workflow, nine-capability typed DSL, trusted filter and comparison builders, fail-closed validator, privacy-safe Repair Brief, automatic registry discovery, SHA-bound Compatibility Sentinel, drift quarantine, per-operation health, and network-silence tests | Show `collectionCompare`, then flash the 11/11 live fingerprint, 10/10 assertions, six-hour workflow, and 43/43 safety tests |
@@ -63,7 +65,7 @@ Our flagship MetroCare demo starts with a realistic healthcare directory: twelve
 - Official `.agents/skills` `$openpatch-author` workflow plus a distributable Codex plugin
 - Generated `/registry/index.json` with versioned downloads, SHA-256 receipts, and quarantine-aware compatibility metadata
 - Public `/registry/compatibility.json` plus a six-hour Chromium workflow that checks every patch against its deployed target and records per-operation fingerprints
-- JSDOM unit tests plus Playwright desktop and 390px before/after tests
+- JSDOM unit tests plus Playwright desktop and 390px before/after tests, including axe WCAG A/AA audits
 - Vite landing page, realistic MetroCare missing-feature demo, and CivicApply repair demo
 
 GPT‑5.6 operates through Codex while a patch is authored and tested. The installed extension contains no model call and needs no OpenAI API key.
@@ -82,7 +84,7 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 - 19/19 CivicApply repair operations and 10/10 assertions remain healthy
 - 43/43 security, registry-discovery, compatibility-quarantine, preflight, runtime, and privacy tests passing
 - 4/4 Manifest V3 extension integration tests passing, including both real public demo domains
-- 14/14 desktop and 390px browser journeys passing, including the instant judge preview and interactive quarantine console
+- 20/20 desktop and 390px browser journeys passing, including six strict axe WCAG A/AA scans with zero automated violations
 - Browser proof that filter and comparison interactions emit zero network requests
 - A working no-account, no-API-key extension flow
 - A validated Codex skill that turns complaints into test-gated patches

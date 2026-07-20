@@ -18,7 +18,7 @@
 - Secondary CivicApply demo: https://patch-the-web.vercel.app/demo/
 - Chrome extension: https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.8.0.zip
 - Codex authoring plugin: https://patch-the-web.vercel.app/downloads/patch-the-web-codex-plugin-v0.4.0.zip
-- Upload-ready demo video: `submission-assets/patch-the-web-demo.mp4` (2:56, continuous live browser recording, narrated and scene-synchronized captions; public YouTube URL pending)
+- Public demo video: https://youtu.be/AVjukDA786E (`submission-assets/patch-the-web-demo.mp4`, 2:56, continuous live browser recording, narrated and scene-synchronized captions)
 - Devpost 3:2 cover: `submission-assets/patch-the-web-devpost-thumbnail.png`
 - Extension SHA-256: `30C472E6B23E5A75BD709EA3040EEFCD62FBC35A669773D8400FDFE1E1CD4F50`
 - Plugin SHA-256: `EFD9B788FBC90E6248427F2421B3239DAAF2CE398D550B01CED5390880DD06CF`
@@ -132,11 +132,11 @@ No credentials or API key are needed.
 - [x] Upload `release/patch-the-web-extension-v0.8.0.zip` and `release/patch-the-web-codex-plugin-v0.4.0.zip` to a stable public download
 - [x] Attach the validated Codex plugin package and mention the repo-discovered skill path
 - [x] Make the repository public under the MIT license, or share private access with the required judge accounts
-- [ ] Add repository URL to Devpost
+- [x] Add repository URL to Devpost
 - [x] Record a narrated, captioned demo video under 3 minutes (`submission-assets/patch-the-web-demo.mp4`)
-- [ ] Upload the final video and thumbnail to public YouTube using `VIDEO_UPLOAD.md`
-- [ ] Add YouTube URL to Devpost
-- [ ] Run `/feedback` in the primary Codex build thread and add the Session ID
+- [x] Upload the final video to public YouTube using `VIDEO_UPLOAD.md`
+- [ ] Save the YouTube URL in Devpost
+- [x] Run `/feedback` in the primary Codex build thread and add the Session ID
 - [x] Add the public demo URL and exact no-login testing instructions
 - [x] Prepare project thumbnail and same-viewport MetroCare before/after screenshots in `submission-assets`
 - [ ] Complete all five Devpost steps and submit before July 21, 2026 at 5:00 PM Pacific

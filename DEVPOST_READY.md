@@ -4,12 +4,12 @@
 
 This file is the single copy/paste source for the final OpenAI Build Week submission. It was audited against the official rules and current Devpost submission guidance on July 20, 2026.
 
-## Only two values are still unavailable
+## Finalization values
 
-1. `PUBLIC_YOUTUBE_URL` — created only after the prepared video is uploaded publicly.
-2. `CODEX_FEEDBACK_SESSION_ID` — obtained by running `/feedback` in the primary Codex build thread.
+1. Public YouTube URL — https://youtu.be/AVjukDA786E
+2. Codex `/feedback` Session ID — obtained from the primary build thread, stored only in the private release packet, and saved in the Devpost draft.
 
-Do not submit with either placeholder still present.
+Do not publish the private Session ID in the repository or public project story.
 
 ## Deadline and category
 
@@ -150,7 +150,7 @@ Add in this order:
 ### Video demo link
 
 ```text
-PUBLIC_YOUTUBE_URL
+https://youtu.be/AVjukDA786E
 ```
 
 The link must be a public YouTube URL with embedding allowed. Verify it while signed out before adding it to Devpost.
@@ -266,9 +266,9 @@ The video is one continuous live browser workflow: public download, Chrome exten
 - [x] Production compatibility monitor and clean-install CI passing
 - [x] All public links return HTTP 200
 - [x] No tracked `.env` files or common credential patterns found
-- [ ] Public YouTube URL added and verified while signed out
-- [ ] `/feedback` Session ID added
-- [ ] Truthful submitter country selected
+- [ ] Public YouTube URL saved in the Devpost draft and verified public
+- [x] `/feedback` Session ID added
+- [x] Truthful submitter country selected
 - [ ] Devpost preview proofread after all fields are saved
 - [ ] Final submission explicitly authorized by the user
 

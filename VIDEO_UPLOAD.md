@@ -17,6 +17,8 @@
 
 Patch the Web — Fix Websites You Don’t Own | OpenAI Build Week 2026
 
+**Published video:** https://youtu.be/AVjukDA786E
+
 ## YouTube description
 
 Patch the Web lets people add safe, reusable features to websites they do not control.

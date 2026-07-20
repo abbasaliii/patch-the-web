@@ -3,14 +3,15 @@
 ## Final assets
 
 - Video: `submission-assets/openpatch-demo.mp4`
-- Runtime: 2:43.60
-- Format: 1600×900 (16:9) H.264 High, 30 fps, AAC-LC
+- Runtime: 1:58.13
+- Format: 1536×864 (16:9) H.264 High, 30 fps, AAC-LC
 - Audio target: normalized to −16 LUFS with −1.5 dBTP ceiling
-- Size: 11,656,026 bytes
-- SHA-256: `46BE30C294F31D949C4B3850F87527C20339C559C8FC96684E2C8DD510597413`
+- Size: 8,000,695 bytes
+- SHA-256: `232A728EC8810BA11EFF0D6442B4791AC0459AF52DCBD6538BD37CE48D091A92`
 - Thumbnail: `submission-assets/openpatch-youtube-thumbnail.png` (1280×720)
 - Captions: `submission-assets/openpatch-demo.srt`
-- Narration source: `submission-assets/demo-narration.txt`
+- Narration source: `submission-assets/live-demo-narration.txt`
+- Recording style: one uninterrupted live browser session; the real extension popup is synchronized over the same continuous page timeline
 
 ## YouTube title
 
@@ -37,15 +38,16 @@ Built with GPT-5.6 and Codex for OpenAI Build Week 2026. The healthcare director
 ## Chapters
 
 ```text
-0:00 Websites you cannot change
-0:17 The whole product in three steps
-0:33 MetroCare before OpenPatch
-0:50 Privacy-safe Codex authoring
-1:09 A constrained patch, not a userscript
-1:29 Twelve services become one
-1:46 Keyboard-accessible comparison
-2:02 Everyone else installs without AI
-2:23 Compatibility, quarantine, and form repair
+0:00 Start at the public OpenPatch site
+0:10 Download and verify the extension
+0:23 Open the original MetroCare directory
+0:35 Discover a verified community repair
+0:49 Install the domain-scoped patch
+1:00 Use the live comparison feature
+1:12 Filter twelve services to one
+1:24 Reload and prove preferences persist
+1:36 Review the active repair and permissions
+1:45 Why everyone else needs no AI or account
 ```
 
 ## Upload settings

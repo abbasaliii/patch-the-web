@@ -1,17 +1,21 @@
 param(
   [string]$Voice = "Microsoft Zira Desktop",
-  [int]$Rate = 0
+  [int]$Rate = 0,
+  [string]$NarrationFile = "demo-narration.json",
+  [string]$TimingFile = "demo-timings.json",
+  [string]$CaptionFile = "openpatch-demo.srt",
+  [string]$OutputStem = "openpatch-demo"
 )
 
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Speech
 
 $demoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
-$narrationPath = Join-Path $demoRoot "submission-assets\demo-narration.json"
-$audioDir = Join-Path $demoRoot "dist\video\audio"
-$timingPath = Join-Path $demoRoot "dist\video\demo-timings.json"
-$captionPath = Join-Path $demoRoot "submission-assets\openpatch-demo.srt"
-$combinedAudioPath = Join-Path $demoRoot "dist\video\openpatch-demo-narration.wav"
+$narrationPath = Join-Path $demoRoot ("submission-assets\{0}" -f $NarrationFile)
+$audioDir = Join-Path $demoRoot ("dist\video\audio-{0}" -f $OutputStem)
+$timingPath = Join-Path $demoRoot ("dist\video\{0}" -f $TimingFile)
+$captionPath = Join-Path $demoRoot ("submission-assets\{0}" -f $CaptionFile)
+$combinedAudioPath = Join-Path $demoRoot ("dist\video\{0}-narration.wav" -f $OutputStem)
 $concatPath = Join-Path $audioDir "concat.txt"
 
 New-Item -ItemType Directory -Path $audioDir -Force | Out-Null

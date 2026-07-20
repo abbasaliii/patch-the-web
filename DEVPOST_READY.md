@@ -240,9 +240,9 @@ OpenPatch is original work created during the submission period and released und
 Use [VIDEO_UPLOAD.md](VIDEO_UPLOAD.md) as the authoritative upload source.
 
 - Video: `submission-assets/openpatch-demo.mp4`
-- Runtime: 2:44
-- Resolution: 1600×900, 16:9
-- Video SHA-256: `46BE30C294F31D949C4B3850F87527C20339C559C8FC96684E2C8DD510597413`
+- Runtime: 1:58
+- Resolution: 1536×864, 16:9
+- Video SHA-256: `232A728EC8810BA11EFF0D6442B4791AC0459AF52DCBD6538BD37CE48D091A92`
 - Thumbnail: `submission-assets/openpatch-youtube-thumbnail.png`
 - Captions: `submission-assets/openpatch-demo.srt`
 - Audience: Not made for kids
@@ -251,7 +251,7 @@ Use [VIDEO_UPLOAD.md](VIDEO_UPLOAD.md) as the authoritative upload source.
 - Paid promotion: No
 - Music: None
 
-The video deliberately prioritizes a plain-language product story; the YouTube description and submission text carry the full current evidence: 44 unit/policy tests, 20 browser journeys, 6 extension integrations, and eight additional production accessibility scans.
+The video is one continuous live browser workflow: public download, Chrome extension verification, original site, verified registry discovery, real patch installation, comparison, filters, reload persistence, and permission review. The YouTube description and submission text carry the full current evidence: 44 unit/policy tests, 20 browser journeys, 6 extension integrations, and eight additional production accessibility scans.
 
 ## Final eligibility cross-check
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-20T08:11:49.831Z",
+  "generatedAt": "2026-07-20T11:30:31.990Z",
   "registryUrl": "workspace:src/registry/patches",
   "summary": {
     "healthy": 2,
@@ -14,7 +14,7 @@
       "version": "1.2.0",
       "pageUrl": "https://openpatch-tau.vercel.app/demo/",
       "status": "healthy",
-      "checkedAt": "2026-07-20T08:11:49.831Z",
+      "checkedAt": "2026-07-20T11:30:31.990Z",
       "patchSha256": "34427b68a8004c90edd33c287db8472cb356854215ba3a8d46c26032674d2721",
       "healthy": 19,
       "total": 19,
@@ -123,7 +123,7 @@
       "version": "1.1.0",
       "pageUrl": "https://openpatch-tau.vercel.app/care/",
       "status": "healthy",
-      "checkedAt": "2026-07-20T08:11:49.831Z",
+      "checkedAt": "2026-07-20T11:30:31.990Z",
       "patchSha256": "14cef4195ec8227fe62c16845fedc683fae1dcb4fd3a752296cef7a1bf9a936c",
       "healthy": 11,
       "total": 11,

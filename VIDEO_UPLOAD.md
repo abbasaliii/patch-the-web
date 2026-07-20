@@ -24,10 +24,13 @@ One person describes a missing capability to GPT-5.6 through Codex. The OpenPatc
 
 The flagship MetroCare patch adds private search, combined access filters, and keyboard-accessible provider comparison to a realistic healthcare directory. The Compatibility Sentinel verifies exact patch bytes and live selectors every six hours, quarantining repairs when the original website changes underneath them.
 
+Current release evidence: 44 unit/policy tests + 20 desktop/mobile browser journeys + 6 packaged-extension integrations pass (70 total). Eight additional post-deploy axe scans across four production surfaces report zero automated WCAG A/AA violations.
+
 Live product: https://openpatch-tau.vercel.app/
 Flagship demo: https://openpatch-tau.vercel.app/care/
 Compatibility Sentinel: https://openpatch-tau.vercel.app/sentinel/
 Source and Build Week record: https://github.com/abbasaliii/openpatch
+Verified v0.8.0 release: https://github.com/abbasaliii/openpatch/releases/tag/v0.8.0
 
 Built with GPT-5.6 and Codex for OpenAI Build Week 2026. The healthcare directory and providers are fictional demonstration data; this is not medical guidance.
 

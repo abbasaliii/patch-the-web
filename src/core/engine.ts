@@ -18,6 +18,7 @@ type BrowserContext = {
 
 const MAX_MATCHES = 100;
 const SENSITIVE_AUTOCOMPLETE = /(?:current-password|new-password|one-time-code|cc-|transaction-|webauthn)/i;
+const SENSITIVE_FIELD_HINT = /(?:^|[-_.])(?:password|passwd|passcode|pin|otp|one[-_.]?time|verification[-_.]?code|auth[-_.]?code|security[-_.]?code|secret|token|cvv|cvc|card[-_.]?number|credit[-_.]?card|routing[-_.]?number|bank[-_.]?account|account[-_.]?number|social[-_.]?security|ssn|tax[-_.]?id|passport)(?:$|[-_.])/i;
 
 function installTrustedUiStyles(document: Document) {
   if (document.querySelector("style[data-openpatch-ui]")) return;
@@ -154,11 +155,15 @@ function isEligibleField(element: Element): element is HTMLInputElement | HTMLSe
   if (!["INPUT", "SELECT", "TEXTAREA"].includes(element.tagName)) return false;
   if (element.tagName === "INPUT" && ["password", "file", "hidden", "submit", "button", "reset", "image"].includes((element as HTMLInputElement).type)) return false;
   if (SENSITIVE_AUTOCOMPLETE.test(element.getAttribute("autocomplete") || "")) return false;
+  if ([element.getAttribute("name") || "", element.getAttribute("id") || ""].some((value) => SENSITIVE_FIELD_HINT.test(value))) return false;
   return !(element as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).disabled;
 }
 
-function fieldKey(element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, index: number) {
-  return element.name || element.id || `field-${index}`;
+function fieldKeys(elements: Array<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+  const bases = elements.map((element, index) => element.name || element.id || `field-${index}`);
+  const counts = new Map<string, number>();
+  bases.forEach((base) => counts.set(base, (counts.get(base) ?? 0) + 1));
+  return bases.map((base, index) => (counts.get(base) ?? 0) > 1 ? `${base}:${index}` : base);
 }
 
 function readField(element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) {
@@ -191,6 +196,7 @@ function setupPersistence(
   const fields = operation.include.flatMap((selector) => selected(form.ownerDocument, `${operation.selector} ${selector}`))
     .filter(isEligibleField);
   const uniqueFields = [...new Set(fields)].slice(0, 40);
+  const uniqueFieldKeys = fieldKeys(uniqueFields);
   const storageKey = `openpatch:${patch.id}:${operation.key}`;
   const status = document.createElement("p");
   status.className = "openpatch-save-status";
@@ -214,7 +220,7 @@ function setupPersistence(
         storage.removeItem(storageKey);
         status.textContent = `Previous draft expired · ${operation.statusText}`;
       } else {
-        uniqueFields.forEach((field, index) => writeField(field, values[fieldKey(field, index)]));
+        uniqueFields.forEach((field, index) => writeField(field, values[uniqueFieldKeys[index]]));
         status.textContent = `Draft restored · ${operation.statusText}`;
         restored = true;
       }
@@ -226,7 +232,7 @@ function setupPersistence(
   const save = () => {
     const snapshot: Record<string, unknown> = {};
     uniqueFields.forEach((field, index) => {
-      snapshot[fieldKey(field, index)] = readField(field);
+      snapshot[uniqueFieldKeys[index]] = readField(field);
     });
     try {
       storage.setItem(storageKey, JSON.stringify({ savedAt: Date.now(), values: snapshot }));
@@ -288,7 +294,15 @@ function setupValidation(operation: ValidationOperation, context: BrowserContext
     return false;
   };
 
-  pairs.forEach(({ element, rules }) => element.addEventListener("blur", () => validate(element, rules)));
+  pairs.forEach(({ element, rules }) => {
+    element.addEventListener("blur", () => validate(element, rules));
+    element.addEventListener("input", () => {
+      if (element.getAttribute("aria-invalid") === "true") validate(element, rules);
+    });
+    element.addEventListener("change", () => {
+      if (element.getAttribute("aria-invalid") === "true") validate(element, rules);
+    });
+  });
   form.addEventListener("submit", (event) => {
     const invalid = pairs.filter(({ element, rules }) => !validate(element, rules));
     if (invalid.length > 0) {
@@ -396,7 +410,7 @@ function setupCollectionFilter(
     if (!storageKey) return;
     try { storage.setItem(storageKey, JSON.stringify({ savedAt: Date.now(), ...readState() })); } catch { /* origin storage can be unavailable */ }
   };
-  const apply = () => {
+  const apply = (persist = true) => {
     const query = search.value.trim().toLowerCase();
     let visible = 0;
     items.forEach((item) => {
@@ -412,7 +426,7 @@ function setupCollectionFilter(
       if (show) visible += 1;
     });
     status.textContent = `${visible} of ${items.length} services match`;
-    saveState();
+    if (persist) saveState();
   };
 
   if (storageKey && operation.persist) {
@@ -434,12 +448,15 @@ function setupCollectionFilter(
     } catch { /* invalid local state is ignored */ }
   }
 
-  search.addEventListener("input", apply);
-  selects.forEach(({ select }) => select.addEventListener("change", apply));
+  search.addEventListener("input", () => apply());
+  selects.forEach(({ select }) => select.addEventListener("change", () => apply()));
   clear.addEventListener("click", () => {
     search.value = "";
     selects.forEach(({ select }) => { select.value = ""; });
-    apply();
+    apply(false);
+    if (storageKey) {
+      try { storage.removeItem(storageKey); } catch { /* origin storage can be unavailable */ }
+    }
     search.focus();
   });
   document.addEventListener("keydown", (event) => {
@@ -455,7 +472,7 @@ function setupCollectionFilter(
       apply();
     }
   });
-  apply();
+  apply(false);
   return { matched: items.length, detail: `${items.length} items filterable` };
 }
 

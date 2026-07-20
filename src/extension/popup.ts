@@ -47,6 +47,8 @@ const importStatus = byId<HTMLElement>("import-status");
 const installButton = byId<HTMLButtonElement>("install-button");
 const installFlow = byId<HTMLElement>("install-flow");
 const registryMatch = byId<HTMLElement>("registry-match");
+const removePatchButton = byId<HTMLButtonElement>("remove-patch");
+const removeStatus = byId<HTMLElement>("remove-status");
 
 let currentTab: chrome.tabs.Tab | undefined;
 let currentPatch: MatchedPatchState | undefined;
@@ -105,6 +107,7 @@ function renderState(state: PageState) {
     ...selected.patch.capabilities.map((capability) => Object.assign(document.createElement("li"), { textContent: CAPABILITY_LABELS[capability] ?? capability }))
   );
   byId("health-detail").textContent = `${selected.patch.operationCount} constrained operations · no arbitrary JavaScript`;
+  removePatchButton.hidden = selected.source !== "local";
   if (selected.enabled && selected.health) {
     byId("health-title").textContent = `${selected.health.healthy}/${selected.health.total} operations healthy`;
     byId("health-detail").textContent = selected.health.applied
@@ -222,6 +225,37 @@ toggle.addEventListener("change", async () => {
   await chrome.storage.local.set({ enabledPatches });
   if (currentTab?.id) await chrome.tabs.reload(currentTab.id);
   window.close();
+});
+
+removePatchButton.addEventListener("click", async () => {
+  if (!currentPatch || currentPatch.source !== "local" || !currentTab?.id) return;
+  removePatchButton.disabled = true;
+  removeStatus.textContent = "Removing the patch and its local metadata…";
+  try {
+    const stored = await chrome.storage.local.get(["installedPatches", "installedPatchMeta", "enabledPatches"]);
+    const installedPatches = (stored.installedPatches as Record<string, OpenPatch> | undefined) ?? {};
+    const installedPatchMeta = (stored.installedPatchMeta as Record<string, unknown> | undefined) ?? {};
+    const enabledPatches = (stored.enabledPatches as Record<string, boolean> | undefined) ?? {};
+    const removed = installedPatches[currentPatch.patch.id];
+    delete installedPatches[currentPatch.patch.id];
+    delete installedPatchMeta[currentPatch.patch.id];
+    delete enabledPatches[currentPatch.patch.id];
+    await chrome.storage.local.set({ installedPatches, installedPatchMeta, enabledPatches });
+    const refreshed = await chrome.runtime.sendMessage({ type: "OPENPATCH_REFRESH_RUNTIME" }) as { ok?: boolean; error?: string } | undefined;
+    if (!refreshed?.ok) throw new Error(refreshed?.error ?? "Could not refresh the repair runtime.");
+
+    if (removed) {
+      const originsStillNeeded = new Set(Object.values(installedPatches).flatMap((patch) => permissionOrigins(patch)));
+      const unusedOrigins = permissionOrigins(removed).filter((origin) => !originsStillNeeded.has(origin));
+      if (unusedOrigins.length > 0) await chrome.permissions.remove({ origins: unusedOrigins }).catch(() => false);
+    }
+    removeStatus.textContent = "Patch removed. Reloading this page…";
+    await chrome.tabs.reload(currentTab.id);
+    window.close();
+  } catch (error) {
+    removeStatus.textContent = `Removal failed: ${error instanceof Error ? error.message : "unknown error"}`;
+    removePatchButton.disabled = false;
+  }
 });
 
 authorButton.addEventListener("click", async () => {

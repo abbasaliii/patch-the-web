@@ -70,7 +70,7 @@ export function contentScriptMatches(patches: OpenPatch[]) {
   return [...matches].sort();
 }
 
-export function permissionOrigins(patch: OpenPatch) {
+export function permissionOrigins(patch: Pick<OpenPatch, "match">) {
   return [...new Set(patch.match.hosts.map((host) => {
     const scheme = host === "localhost" || host === "127.0.0.1" ? "http" : "*";
     return `${scheme}://${host}/*`;

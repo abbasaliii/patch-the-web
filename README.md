@@ -67,9 +67,9 @@ Requirements for the public demo: Chrome/Chromium 120+. No build, account, crede
 
 Prebuilt artifacts:
 
-- [OpenPatch extension v0.7.0](https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.7.0.zip) — load-unpacked Chrome extension
+- [OpenPatch extension v0.8.0](https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.8.0.zip) — load-unpacked Chrome extension
 - [OpenPatch Codex plugin v0.4.0](https://openpatch-tau.vercel.app/downloads/openpatch-codex-plugin-v0.4.0.zip) — validated authoring plugin
-- Extension SHA-256: `84D5BA1FE1D947771C92097B9A930EB74D90CD4DD88AAE9990448451F7409665`
+- Extension SHA-256: `7ED1F10FFBD98F93BC8CBBA44DB53B26ECCD5915289983960D631E5922F2CE75`
 - Plugin SHA-256: `E78D5ACC07F5F4E17BE4D8E2EB37905A56BACA14E591DFBA7403BB3E4BFEDED9`
 
 Then:
@@ -85,6 +85,7 @@ Then:
 7. Select Harbor Family Clinic and Northside Community Health, then choose **Compare selected**. OpenPatch creates an accessible side-by-side decision table without sending a request.
 8. Clear the comparison, choose **Wheelchair access**, **Urdu**, and **Accepting new patients**, and watch the directory reduce to Harbor Family Clinic with `1 of 12 services match`.
 9. Reload to see the preferences restored locally; press `/` to focus search. The automated test proves filtering and comparison make zero network requests.
+10. Reopen OpenPatch and choose **Remove this installed patch** to verify that the feature, enabled state, and installation metadata are removed together.
 
 No account, test credential, API key, or external service is required.
 
@@ -116,7 +117,7 @@ The same skill is packaged as a distributable Codex plugin under `plugins/openpa
 
 For transparent/offline distribution, **Download safe patch** and manual `.openpatch.json` import still run through the same independent policy, scope, hash, and live-selector checks.
 
-Imported patches are stored locally, run through the same constrained runtime, and can replace an older version only when their semantic version is equal or newer. Invalid stored entries are ignored rather than executed.
+Imported patches are stored locally, run through the same constrained runtime, and can replace an older version only when their semantic version is equal or newer. Invalid stored entries are ignored rather than executed. Installed community patches can be disabled per domain or removed with their local metadata and any now-unused optional host access.
 
 ### Supported platforms
 
@@ -140,16 +141,16 @@ npm run verify
 
 Current results:
 
-- 43/43 unit, policy, registry-discovery, compatibility-quarantine, preflight, runtime, and privacy tests pass
+- 44/44 unit, policy, registry-discovery, compatibility-quarantine, preflight, runtime, and privacy tests pass
 - 20/20 desktop and 390px browser journeys pass, including six strict automated WCAG A/AA scans across both patched products, the landing page, and Compatibility Sentinel
-- 4/4 Manifest V3 extension integration tests pass with a dynamically installed patch plus both real public demo domains
+- 6/6 Manifest V3 extension integration tests pass with dynamic installation, both real public demo domains, uninstall cleanup, and the domain-scoped enable switch
 - 11/11 flagship constrained operations apply; 19/19 CivicApply operations remain healthy
 - 10/10 flagship publication assertions pass; 10/10 CivicApply assertions remain healthy
 - Production site and Manifest V3 extension build successfully
 - Public `/registry/index.json` and versioned patch download are generated with a SHA-256 receipt
 - Public `/registry/compatibility.json` exposes live-page fingerprints and per-operation health; a least-privilege, immutable-action GitHub workflow reruns it every six hours, retries transient failures, retains the full receipt, and promotes only quarantine or recovery transitions
 
-Browser tests prove both product claims: MetroCare starts as a realistic directory with no search, filters, or comparison, then privately combines access needs, compares providers, persists preferences, announces results, supports the keyboard, fits mobile, and emits no interaction requests; CivicApply still proves layout repair, local draft restoration, specific accessible errors, and arrow-key focus movement. Axe audits the fully patched workflows and public product surfaces at WCAG A/AA tags on desktop and mobile, with zero automated violations.
+Browser tests prove both product claims: MetroCare starts as a realistic directory with no search, filters, or comparison, then privately combines access needs, compares up to three providers, persists and expires preferences, announces results, supports `/` and Escape, fits mobile, and emits no interaction requests; CivicApply proves full-field draft restoration, exclusion of credential/payment/authentication fields, specific live-clearing accessible errors, first-error focus, and wrapping Arrow/Home/End navigation. Axe audits the fully patched workflows and public product surfaces at WCAG A/AA tags on desktop and mobile, with zero automated violations.
 
 ## Repository map
 
@@ -220,7 +221,7 @@ OpenPatch treats patches, websites, registry metadata, and page content as untru
 - CSS properties and attributes use allowlists.
 - Critical singleton targets fail closed when selector counts drift.
 - Every operation emits health data for breakage detection.
-- Local draft storage stays on the page origin and excludes sensitive fields.
+- Local draft storage stays on the page origin, excludes credential, payment, authentication, identity, file, hidden, and disabled controls, and deletes expired state instead of renewing it on page load.
 - Community permissions are displayed before activation.
 - Patches never replace the site's actual authentication, submission, or server validation.
 - Repair Briefs exclude values, cookies, storage, query strings, and page text before anything is copied to Codex.

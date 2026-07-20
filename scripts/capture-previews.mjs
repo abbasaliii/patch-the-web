@@ -81,6 +81,36 @@ try {
   });
   await popup.goto(`file://${resolve(root, "dist/extension/popup.html").replaceAll("\\", "/")}`, { waitUntil: "load" });
   await popup.screenshot({ path: resolve(previewDir, "openpatch-repair-brief.png"), fullPage: true });
+
+  const installedPopup = await browser.newPage({ viewport: { width: 430, height: 780 }, deviceScaleFactor: 1 });
+  await installedPopup.addInitScript(() => {
+    const patch = {
+      id: "org.openpatch.metrocare-service-navigator",
+      name: "MetroCare: personal service navigator",
+      summary: "Adds private search, combined access filters, and accessible provider comparison.",
+      version: "1.1.0",
+      author: { name: "OpenPatch Community" },
+      match: { hosts: ["example.gov"], paths: ["/services/*"] },
+      capabilities: ["content-filter", "content-compare", "accessibility", "keyboard-navigation", "local-storage"],
+      operationCount: 11
+    };
+    Object.defineProperty(globalThis, "chrome", {
+      value: {
+        tabs: {
+          query: async () => [{ id: 8, url: "https://example.gov/services/" }],
+          sendMessage: async () => ({ matched: true, matches: [{ enabled: true, source: "local", health: { applied: true, healthy: 11, total: 11 }, patch }] }),
+          reload: async () => undefined
+        },
+        storage: { local: { get: async () => ({}), set: async () => undefined } },
+        scripting: { executeScript: async () => [] },
+        runtime: { sendMessage: async () => ({ ok: true }) },
+        permissions: { remove: async () => true }
+      }
+    });
+  });
+  await installedPopup.goto(`file://${resolve(root, "dist/extension/popup.html").replaceAll("\\", "/")}`, { waitUntil: "load" });
+  await installedPopup.locator("#remove-patch").waitFor({ state: "visible" });
+  await installedPopup.screenshot({ path: resolve(previewDir, "openpatch-installed-controls.png"), fullPage: true });
 } finally {
   await browser.close();
   await server.close();

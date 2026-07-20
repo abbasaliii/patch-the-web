@@ -74,6 +74,11 @@ input:focus-visible + .toggle { outline: 3px solid rgba(11, 154, 109, .2); outli
 details { border-top: 1px solid #edf1ef; }
 summary { padding-top: 12px; color: #516058; font-size: 10px; font-weight: 800; cursor: pointer; }
 ul { margin: 9px 0 0; padding-left: 18px; color: #6d7973; font-size: 10px; line-height: 1.65; }
+.remove-patch { width: 100%; margin-top: 13px; padding: 9px 11px; border: 1px solid #e1c8c3; border-radius: 9px; color: #8b342d; background: #fff9f8; font: 800 10px/1 inherit; cursor: pointer; }
+.remove-patch:hover { border-color: #ce9e96; background: #fff2f0; }
+.remove-patch:focus-visible { outline: 3px solid rgba(139, 52, 45, .17); outline-offset: 2px; }
+.remove-patch:disabled { cursor: wait; opacity: .6; }
+.remove-status { min-height: 12px; margin: 7px 0 0; color: #8b342d; font-size: 9px; font-weight: 800; }
 .empty-state { padding: 24px 16px 28px; text-align: center; }
 .empty-mark { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 13px; border: 1px dashed #b7c8c0; border-radius: 16px; color: #709182; background: white; font-size: 25px; }
 .empty-state p { margin: 8px auto 0; max-width: 260px; color: #718079; font-size: 12px; line-height: 1.5; }

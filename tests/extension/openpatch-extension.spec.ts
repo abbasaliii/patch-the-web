@@ -50,6 +50,10 @@ test("the production extension loads validated local patches and the bundled rep
 
   let worker = context.serviceWorkers()[0];
   if (!worker) worker = await context.waitForEvent("serviceworker");
+  await expect.poll(async () => worker.evaluate(async () => {
+    const stored = await chrome.storage.local.get("registryMeta");
+    return (stored.registryMeta as { schemaVersion?: number } | undefined)?.schemaVersion;
+  })).toBe(1);
   await worker.evaluate(async ({ importedPatch, patchId }) => {
     const stored = await chrome.storage.local.get(["installedPatches", "enabledPatches"]);
     const installedPatches = (stored.installedPatches ?? {}) as Record<string, unknown>;
@@ -140,4 +144,51 @@ test("the registry-installed feature also runs on the real public MetroCare doma
   await page.locator("select[id$='-availability']").selectOption("new-patients");
   await expect(page.locator(".openpatch-navigator__status")).toHaveText("1 of 12 services match");
   await expect(page.locator(".care-service:visible h3")).toHaveText("Harbor Family Clinic");
+});
+
+test("an installed community feature can be removed with its local metadata", async () => {
+  let worker = context.serviceWorkers()[0];
+  if (!worker) worker = await context.waitForEvent("serviceworker");
+  const extensionId = new URL(worker.url()).host;
+  const popup = await context.newPage();
+  const page = await context.newPage();
+  await page.goto("http://127.0.0.1:4174/care/");
+  await expect(page.locator(".openpatch-navigator")).toBeVisible();
+
+  await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+  await expect(popup.locator("#remove-patch")).toBeVisible();
+  await popup.locator("#remove-patch").click();
+
+  await expect.poll(async () => worker.evaluate(async () => {
+    const stored = await chrome.storage.local.get(["installedPatches", "installedPatchMeta", "enabledPatches"]);
+    const id = "org.openpatch.metrocare-service-navigator";
+    return {
+      installed: Boolean((stored.installedPatches as Record<string, unknown> | undefined)?.[id]),
+      metadata: Boolean((stored.installedPatchMeta as Record<string, unknown> | undefined)?.[id]),
+      enabled: Object.prototype.hasOwnProperty.call((stored.enabledPatches as Record<string, boolean> | undefined) ?? {}, id)
+    };
+  })).toEqual({ installed: false, metadata: false, enabled: false });
+  await expect(page.locator(".openpatch-navigator")).toHaveCount(0);
+  await expect(page.locator("html")).not.toHaveAttribute("data-openpatch-applied", /org\.openpatch\.metrocare-service-navigator/);
+});
+
+test("a bundled repair can be disabled from the domain-scoped switch", async () => {
+  let worker = context.serviceWorkers()[0];
+  if (!worker) worker = await context.waitForEvent("serviceworker");
+  const extensionId = new URL(worker.url()).host;
+  const popup = await context.newPage();
+  const page = await context.newPage();
+  await page.goto("https://openpatch-tau.vercel.app/demo/");
+  await expect(page.locator(".survey-wall")).toBeHidden();
+
+  await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+  await expect(popup.locator("#patch-toggle")).toBeChecked();
+  await popup.locator("#patch-toggle").evaluate((element: HTMLInputElement) => element.click());
+
+  await expect.poll(async () => worker.evaluate(async () => {
+    const stored = await chrome.storage.local.get("enabledPatches");
+    return (stored.enabledPatches as Record<string, boolean> | undefined)?.["org.openpatch.civicapply-accessible-draft"];
+  })).toBe(false);
+  await expect(page.locator(".survey-wall")).toBeVisible();
+  await expect(page.locator("html")).not.toHaveAttribute("data-openpatch-applied", /org\.openpatch\.civicapply-accessible-draft/);
 });

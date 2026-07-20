@@ -32,23 +32,59 @@ test("the safe patch repairs layout, accessibility, autosave, and keyboard behav
 
   await page.locator("#full-name").fill("Alex Morgan");
   await page.locator("#email").fill("alex@example.com");
+  await page.locator("#phone").fill("555-0142");
   await page.locator("#household-size").selectOption("2");
   await page.locator("#address").fill("12 Green Street");
+  await page.locator("input[name='textUpdates']").check();
   await page.reload();
   await page.addScriptTag({ path: runtimePath });
   await page.evaluate(() => (window as Window & { __applyOpenPatchDemo: () => unknown }).__applyOpenPatchDemo());
   await expect(page.locator("#full-name")).toHaveValue("Alex Morgan");
+  await expect(page.locator("#email")).toHaveValue("alex@example.com");
+  await expect(page.locator("#phone")).toHaveValue("555-0142");
+  await expect(page.locator("#household-size")).toHaveValue("2");
+  await expect(page.locator("#address")).toHaveValue("12 Green Street");
+  await expect(page.locator("input[name='textUpdates']")).toBeChecked();
   await expect(page.locator(".openpatch-save-status")).toContainText("Draft restored");
 
-  await page.locator("#email").fill("not-an-email");
+  await page.locator("#full-name").fill("");
+  await page.locator("#email").fill("");
+  await page.locator("#household-size").selectOption("");
+  await page.locator("#address").fill("");
   await page.locator("#benefits-form").evaluate((element) => (element as HTMLFormElement).requestSubmit());
-  await expect(page.getByRole("alert")).toContainText("name@example.com");
+  await expect(page.getByRole("alert")).toHaveCount(4);
+  await expect(page.locator("#full-name")).toBeFocused();
+  await expect(page.locator("#full-name")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.getByRole("alert").nth(0)).toContainText("full name");
+  await expect(page.getByRole("alert").nth(1)).toContainText("email address");
+  await expect(page.getByRole("alert").nth(2)).toContainText("number of people");
+  await expect(page.getByRole("alert").nth(3)).toContainText("street address");
+
+  await page.locator("#full-name").fill("Al");
+  await expect(page.getByRole("alert").nth(0)).toContainText("at least 3 characters");
+  await page.locator("#full-name").fill("Alex Morgan");
+  await expect(page.locator("#full-name")).not.toHaveAttribute("aria-invalid", "true");
+  await page.locator("#email").fill("not-an-email");
+  await expect(page.getByRole("alert").first()).toContainText("name@example.com");
+  await page.locator("#email").fill("alex@example.com");
+  await page.locator("#household-size").selectOption("2");
+  await page.locator("#address").fill("12 Green Street");
+  await expect(page.getByRole("alert")).toHaveCount(0);
 
   const firstStep = page.locator("#progress-steps button").nth(0);
   const secondStep = page.locator("#progress-steps button").nth(1);
+  const lastStep = page.locator("#progress-steps button").nth(2);
   await firstStep.focus();
+  await firstStep.press("ArrowLeft");
+  await expect(lastStep).toBeFocused();
+  await lastStep.press("Home");
+  await expect(firstStep).toBeFocused();
   await firstStep.press("ArrowRight");
   await expect(secondStep).toBeFocused();
+  await secondStep.press("End");
+  await expect(lastStep).toBeFocused();
+  await lastStep.press("ArrowRight");
+  await expect(firstStep).toBeFocused();
   expect(runtimeErrors).toEqual([]);
 });
 
@@ -135,12 +171,19 @@ test("the feature patch privately combines access needs, persists them, and supp
 
   await page.getByRole("button", { name: "Add Harbor Family Clinic to comparison" }).click();
   await page.getByRole("button", { name: "Add Northside Community Health to comparison" }).click();
+  await page.locator(".openpatch-compare__select").nth(1).click();
+  await expect(page.locator(".openpatch-compare__status")).toContainText("3 items selected");
+  await expect(page.locator(".openpatch-compare__select").nth(3)).toBeDisabled();
   await page.getByRole("button", { name: "Compare selected" }).click();
   await expect(page.locator(".openpatch-compare table")).toBeVisible();
   await expect(page.locator(".openpatch-compare table")).toContainText("Harbor Family Clinic");
   await expect(page.locator(".openpatch-compare table")).toContainText("Northside Community Health");
   await expect(page.locator(".openpatch-compare table")).toContainText("Urdu");
   await expect(page.locator(".openpatch-compare__result h3")).toBeFocused();
+  await expect(page.locator(".openpatch-compare__table-wrap")).toHaveAttribute("role", "region");
+  await expect(page.locator(".openpatch-compare__table-wrap")).toHaveAttribute("aria-label", "Scrollable service comparison");
+  await page.locator(".openpatch-compare__table-wrap").focus();
+  await expect(page.locator(".openpatch-compare__table-wrap")).toBeFocused();
   if (testInfo.project.name === "mobile-chromium") {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 2)).toBe(true);
   }
@@ -164,7 +207,14 @@ test("the feature patch privately combines access needs, persists them, and supp
   await page.locator(".openpatch-navigator__clear").click();
   await page.locator(".care-hero h1").click();
   await page.keyboard.press("/");
-  await expect(page.locator(".openpatch-navigator input[type='search']")).toBeFocused();
+  const search = page.locator(".openpatch-navigator input[type='search']");
+  await expect(search).toBeFocused();
+  await search.fill("therapy");
+  await expect(page.locator(".care-service:visible")).toHaveCount(2);
+  await expect(page.locator(".openpatch-navigator__status")).toHaveText("2 of 12 services match");
+  await search.press("Escape");
+  await expect(search).toHaveValue("");
+  await expect(page.locator(".care-service:visible")).toHaveCount(12);
   if (testInfo.project.name === "mobile-chromium") {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 2)).toBe(true);
   }

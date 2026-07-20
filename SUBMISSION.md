@@ -13,11 +13,13 @@
 - Product and registry: https://openpatch-tau.vercel.app/
 - Source repository: https://github.com/abbasaliii/openpatch
 - Build Week engineering record: https://github.com/abbasaliii/openpatch/blob/main/BUILD_WEEK.md
+- Verified v0.8.0 release: https://github.com/abbasaliii/openpatch/releases/tag/v0.8.0
 - Flagship no-login demo: https://openpatch-tau.vercel.app/care/
 - Secondary CivicApply demo: https://openpatch-tau.vercel.app/demo/
-- Chrome extension: https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.7.0.zip
+- Chrome extension: https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.8.0.zip
 - Codex authoring plugin: https://openpatch-tau.vercel.app/downloads/openpatch-codex-plugin-v0.4.0.zip
 - Upload-ready demo video: `submission-assets/openpatch-demo.mp4` (2:26, narrated, captioned; public YouTube URL pending)
+- Devpost 3:2 cover: `submission-assets/openpatch-devpost-thumbnail.png`
 - Extension SHA-256: `84D5BA1FE1D947771C92097B9A930EB74D90CD4DD88AAE9990448451F7409665`
 - Plugin SHA-256: `E78D5ACC07F5F4E17BE4D8E2EB37905A56BACA14E591DFBA7403BB3E4BFEDED9`
 - Machine-readable registry: https://openpatch-tau.vercel.app/registry/index.json
@@ -32,7 +34,7 @@ The authoring workflow is technical, but the product's end user is a citizen, st
 
 | Criterion | Evidence judges can see | Demo moment |
 | --- | --- | --- |
-| Technological Implementation | GPT‑5.6/Codex authoring workflow, nine-capability typed DSL, trusted filter and comparison builders, fail-closed validator, privacy-safe Repair Brief, automatic registry discovery, SHA-bound Compatibility Sentinel, drift quarantine, per-operation health, and network-silence tests | Show `collectionCompare`, then flash the 11/11 live fingerprint, 10/10 assertions, six-hour workflow, and 43/43 safety tests |
+| Technological Implementation | GPT‑5.6/Codex authoring workflow, nine-capability typed DSL, trusted filter and comparison builders, fail-closed validator, privacy-safe Repair Brief, automatic registry discovery, SHA-bound Compatibility Sentinel, drift quarantine, per-operation health, and network-silence tests | Show `collectionCompare`, then flash the 11/11 live fingerprint, 10/10 assertions, six-hour workflow, and 44/44 safety tests |
 | Design | Coherent extension-to-Codex-to-registry flow, plain-language permissions, polished navigator UI, native controls, ARIA result announcements, keyboard shortcut, mobile layout, and a credible unpatched state | Select wheelchair access + Urdu + accepting new patients and watch twelve services become one understandable choice |
 | Potential Impact | Government, education, health, marketplace, and legacy-tool workflows; AI cost is paid once by the author while every downstream user needs no AI, account, or API key | A person expresses a real combination of access needs the original healthcare directory never supported |
 | Quality of the Idea | A public functional feature layer—not a theme editor and not an arbitrary userscript marketplace—with reusable patches and breakage receipts | End on “When a site won’t add it, users still can.” |
@@ -82,8 +84,8 @@ Responsive testing also exposed a subtle issue: device emulation can clamp docum
 
 - 11/11 flagship feature operations and 10/10 publishing assertions healthy
 - 19/19 CivicApply repair operations and 10/10 assertions remain healthy
-- 43/43 security, registry-discovery, compatibility-quarantine, preflight, runtime, and privacy tests passing
-- 4/4 Manifest V3 extension integration tests passing, including both real public demo domains
+- 44/44 security, registry-discovery, compatibility-quarantine, preflight, runtime, and privacy tests passing
+- 6/6 Manifest V3 extension integration tests passing, including both real public demo domains, removal, and the domain switch
 - 20/20 desktop and 390px browser journeys passing, including six strict axe WCAG A/AA scans with zero automated violations
 - Browser proof that filter and comparison interactions emit zero network requests
 - A working no-account, no-API-key extension flow
@@ -103,7 +105,7 @@ Publisher signing and moderation, community review, and additional built-ins suc
 2. Choose **Preview OpenPatch instantly**. The button reports `11/11 healthy` and reveals the exact constrained runtime with no install.
 3. Select Harbor Family Clinic and Northside Community Health, then choose **Compare selected**. Inspect the accessible private decision table.
 4. Clear the comparison. Choose **Wheelchair access**, **Urdu**, and **Accepting new patients**; observe Harbor Family Clinic and the live `1 of 12 services match` announcement.
-5. To verify distribution, download https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.7.0.zip.
+5. To verify distribution, download https://openpatch-tau.vercel.app/downloads/openpatch-extension-v0.8.0.zip.
 6. Unzip it, open `chrome://extensions`, enable Developer mode, and load the folder unpacked.
 7. Reload the original MetroCare page and open the extension. It automatically discovers the verified registry patch, shows its scheduled `11/11` Compatibility Sentinel receipt, confirms its SHA-256, and independently preflights `11/11` targets on the current tab.
 8. Choose **Install verified community feature**, then repeat the filters, reload to see preferences restored on-device, and press `/` to focus search.
@@ -140,7 +142,7 @@ Show the registry with two repairs and open the machine-readable Compatibility S
 ## Submission checklist
 
 - [x] Deploy the landing page, MetroCare flagship, and CivicApply demo to a stable public URL
-- [x] Upload `release/openpatch-extension-v0.7.0.zip` and `release/openpatch-codex-plugin-v0.4.0.zip` to a stable public download
+- [x] Upload `release/openpatch-extension-v0.8.0.zip` and `release/openpatch-codex-plugin-v0.4.0.zip` to a stable public download
 - [x] Attach the validated Codex plugin package and mention the repo-discovered skill path
 - [x] Make the repository public under the MIT license, or share private access with the required judge accounts
 - [ ] Add repository URL to Devpost

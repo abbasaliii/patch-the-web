@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-20T20:40:12.718Z",
-  "registryUrl": "workspace:src/registry/patches",
+  "generatedAt": "2026-07-21T19:51:18.074Z",
+  "registryUrl": "https://patch-the-web.vercel.app/registry/index.json",
   "summary": {
     "healthy": 2,
     "drifted": 0,
-    "unreachable": 0,
-    "total": 2
+    "unreachable": 2,
+    "total": 4
   },
   "patches": [
     {
@@ -14,7 +14,7 @@
       "version": "1.2.0",
       "pageUrl": "https://patch-the-web.vercel.app/demo/",
       "status": "healthy",
-      "checkedAt": "2026-07-20T20:40:12.718Z",
+      "checkedAt": "2026-07-21T19:51:18.074Z",
       "patchSha256": "cccfb834ba58a8012a4ba40f4f064c64eee139605dd6ecbe5c3780e27d946954",
       "healthy": 19,
       "total": 19,
@@ -119,11 +119,25 @@
       ]
     },
     {
+      "id": "org.patchtheweb.hec-campus-finder",
+      "version": "1.0.0",
+      "pageUrl": "https://www.hec.gov.pk/",
+      "status": "unreachable",
+      "checkedAt": "2026-07-21T19:51:18.074Z",
+      "patchSha256": "b0b3d607ced94baf0ec5ec5e4754d3419c6e1cf083a96c244c6b9b020e80c4fe",
+      "healthy": 0,
+      "total": 5,
+      "fingerprint": "d908d8bb8caf0aee3f1903e2a1689fd7201487630a5f017a9b0a6474360e5f04",
+      "driftedOperationIds": [],
+      "results": [],
+      "error": "Patch policy failed at operations[0].type."
+    },
+    {
       "id": "org.patchtheweb.metrocare-service-navigator",
       "version": "1.1.0",
       "pageUrl": "https://patch-the-web.vercel.app/care/",
       "status": "healthy",
-      "checkedAt": "2026-07-20T20:40:12.718Z",
+      "checkedAt": "2026-07-21T19:51:18.074Z",
       "patchSha256": "943ce97c0115f3e2a8b5c011495e9ef6b78cf1da48ab549c0ffd47f4f3c8800c",
       "healthy": 11,
       "total": 11,
@@ -186,6 +200,20 @@
           "healthy": true
         }
       ]
+    },
+    {
+      "id": "org.patchtheweb.nu-karachi-degree-programs",
+      "version": "1.0.0",
+      "pageUrl": "https://nu.edu.pk/",
+      "status": "unreachable",
+      "checkedAt": "2026-07-21T19:51:18.074Z",
+      "patchSha256": "19fab525f610dc7c0abc77a01e48764f558adc8d924429e459f8e70266b3743d",
+      "healthy": 0,
+      "total": 4,
+      "fingerprint": "bc4845325701a0c7834f79e16140e790f4048a3d0c13e3702fe1dfb40085b0ac",
+      "driftedOperationIds": [],
+      "results": [],
+      "error": "Patch policy failed at operations[0].type."
     }
   ]
 }

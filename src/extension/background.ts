@@ -39,11 +39,12 @@ function queueRuntimeRefresh() {
 }
 
 chrome.runtime.onInstalled.addListener(async (details) => {
-  const stored = await chrome.storage.local.get(["enabledPatches", "installedPatches", "installedPatchMeta", "registryMeta"]);
+  const stored = await chrome.storage.local.get(["enabledPatches", "installedPatches", "installedPatchMeta", "patchHistory", "registryMeta"]);
   await chrome.storage.local.set({
     enabledPatches: stored.enabledPatches ?? { [PATCH_ID]: false },
     installedPatches: stored.installedPatches ?? {},
     installedPatchMeta: stored.installedPatchMeta ?? {},
+    patchHistory: stored.patchHistory ?? {},
     registryMeta: {
       ...(stored.registryMeta as Record<string, unknown> | undefined),
       lastSync: Date.now(),

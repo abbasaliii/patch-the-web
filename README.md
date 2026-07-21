@@ -75,9 +75,9 @@ Requirements for the public demo: Chrome/Chromium 120+. No build, account, crede
 
 Prebuilt artifacts:
 
-- [Patch the Web extension v0.9.1](https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.9.1.zip) — load-unpacked Chrome extension with automatic repair discovery and guided repair requests
+- [Patch the Web extension v0.10.0](https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.10.0.zip) — load-unpacked Chrome extension with automatic repair discovery, bounded update history, one-click rollback, and guided repair requests
 - [Patch the Web Codex plugin v0.4.1](https://patch-the-web.vercel.app/downloads/patch-the-web-codex-plugin-v0.4.1.zip) — validated authoring plugin with structured repair-request support
-- Extension SHA-256: `30C472E6B23E5A75BD709EA3040EEFCD62FBC35A669773D8400FDFE1E1CD4F50`
+- Extension SHA-256: `A952870B7606760BC3FFCA68EA695BC4BB26EA6BF0CA9CA879DF422DAFB55CBF`
 - Plugin SHA-256: `EFD9B788FBC90E6248427F2421B3239DAAF2CE398D550B01CED5390880DD06CF`
 
 Then:
@@ -128,6 +128,8 @@ People who do not use Codex can start at the guided [repair request page](https:
 For transparent/offline distribution, **Download safe patch** and manual `.patch-the-web.json` import still run through the same independent policy, scope, hash, and live-selector checks.
 
 Imported patches are stored locally, run through the same constrained runtime, and can replace an older version only when their semantic version is equal or newer. Invalid stored entries are ignored rather than executed. Installed community patches can be disabled per domain or removed with their local metadata and any now-unused optional host access.
+
+Verified updates retain at most three prior patch versions on the device. The extension exposes a restore action only for a history entry that still passes DSL validation; restoration then rechecks its exact source receipt, live selector preflight, current page scope, and Chrome domain permission. The replaced version becomes the next restore point, so a user can undo a rollback. Removing a repair deletes its complete version history.
 
 ### Supported platforms
 

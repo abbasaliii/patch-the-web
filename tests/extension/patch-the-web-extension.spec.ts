@@ -1,11 +1,13 @@
 import { chromium, expect, test, type BrowserContext } from "@playwright/test";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { validatePatch } from "../../src/core/validator";
 import type { CommunityPatch } from "../../src/core/types";
 
 const extensionPath = resolve(import.meta.dirname, "../../dist/extension");
+const metrocarePatchJson = JSON.parse(await readFile(resolve(import.meta.dirname, "../../src/registry/patches/metrocare-service-navigator.patch-the-web.json"), "utf8")) as CommunityPatch;
 const tempPrefix = join(tmpdir(), "patch-the-web-extension-test-");
 const patchId = "org.patchtheweb.extension-installed-test";
 let context: BrowserContext;
@@ -135,6 +137,43 @@ test("the production extension discovers and installs MetroCare from the verifie
   await expect(page.locator("html")).toHaveAttribute("data-patch-the-web-applied", /org\.patchtheweb\.metrocare-service-navigator@1\.1\.0/);
 });
 
+test("a verified update can roll back and then restore the newer version", async () => {
+  let worker = context.serviceWorkers()[0];
+  if (!worker) worker = await context.waitForEvent("serviceworker");
+  const extensionId = new URL(worker.url()).host;
+  const current = metrocarePatchJson as CommunityPatch;
+  const previous: CommunityPatch = { ...current, version: "1.0.0", changelog: "Previous verified MetroCare release." };
+  const previousJson = JSON.stringify(previous);
+  const previousHash = createHash("sha256").update(previousJson).digest("hex");
+
+  await worker.evaluate(async ({ id, previous, previousJson, previousHash }) => {
+    const stored = await chrome.storage.local.get("patchHistory");
+    const patchHistory = (stored.patchHistory ?? {}) as Record<string, unknown[]>;
+    patchHistory[id] = [{ patch: previous, meta: { sha256: previousHash, installedAt: Date.now() - 10_000, source: "public-registry", sourceJson: previousJson }, archivedAt: Date.now() }];
+    await chrome.storage.local.set({ patchHistory });
+  }, { id: current.id, previous, previousJson, previousHash });
+
+  const rollbackPopup = await context.newPage();
+  const page = await context.newPage();
+  await page.goto("http://127.0.0.1:4174/care/");
+  await expect(page.locator("html")).toHaveAttribute("data-patch-the-web-applied", /org\.patchtheweb\.metrocare-service-navigator@1\.1\.0/);
+
+  await rollbackPopup.goto(`chrome-extension://${extensionId}/popup.html`);
+  await expect(rollbackPopup.locator("#restore-row")).toBeVisible();
+  await expect(rollbackPopup.locator("#restore-patch")).toHaveText("Restore v1.0.0");
+  await rollbackPopup.locator("#restore-patch").click();
+  await expect.poll(async () => worker.evaluate(async (id) => ((await chrome.storage.local.get("installedPatches")).installedPatches as Record<string, CommunityPatch>)[id]?.version, current.id)).toBe("1.0.0");
+  await expect(page.locator("html")).toHaveAttribute("data-patch-the-web-applied", /org\.patchtheweb\.metrocare-service-navigator@1\.0\.0/);
+
+  const redoPopup = await context.newPage();
+  await page.bringToFront();
+  await redoPopup.goto(`chrome-extension://${extensionId}/popup.html`);
+  await expect(redoPopup.locator("#restore-patch")).toHaveText("Restore v1.1.0");
+  await redoPopup.locator("#restore-patch").click();
+  await expect.poll(async () => worker.evaluate(async (id) => ((await chrome.storage.local.get("installedPatches")).installedPatches as Record<string, CommunityPatch>)[id]?.version, current.id)).toBe("1.1.0");
+  await expect(page.locator("html")).toHaveAttribute("data-patch-the-web-applied", /org\.patchtheweb\.metrocare-service-navigator@1\.1\.0/);
+});
+
 test("the registry-installed feature also runs on the real public MetroCare domain", async () => {
   const page = await context.newPage();
   await page.goto("https://patch-the-web.vercel.app/care/");
@@ -173,14 +212,15 @@ test("an installed community feature can be removed with its local metadata", as
   await popup.locator("#remove-patch").click();
 
   await expect.poll(async () => worker.evaluate(async () => {
-    const stored = await chrome.storage.local.get(["installedPatches", "installedPatchMeta", "enabledPatches"]);
+    const stored = await chrome.storage.local.get(["installedPatches", "installedPatchMeta", "enabledPatches", "patchHistory"]);
     const id = "org.patchtheweb.metrocare-service-navigator";
     return {
       installed: Boolean((stored.installedPatches as Record<string, unknown> | undefined)?.[id]),
       metadata: Boolean((stored.installedPatchMeta as Record<string, unknown> | undefined)?.[id]),
-      enabled: Object.prototype.hasOwnProperty.call((stored.enabledPatches as Record<string, boolean> | undefined) ?? {}, id)
+      enabled: Object.prototype.hasOwnProperty.call((stored.enabledPatches as Record<string, boolean> | undefined) ?? {}, id),
+      history: Object.prototype.hasOwnProperty.call((stored.patchHistory as Record<string, unknown> | undefined) ?? {}, id)
     };
-  })).toEqual({ installed: false, metadata: false, enabled: false });
+  })).toEqual({ installed: false, metadata: false, enabled: false, history: false });
   await expect(page.locator(".patch-the-web-navigator")).toHaveCount(0);
   await expect(page.locator("html")).not.toHaveAttribute("data-patch-the-web-applied", /org\.patchtheweb\.metrocare-service-navigator/);
 });

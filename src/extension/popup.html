@@ -66,6 +66,11 @@
           <summary>Review patch permissions</summary>
           <ul id="permissions-list"></ul>
         </details>
+        <section class="restore-row" id="restore-row" hidden aria-labelledby="restore-title">
+          <div><strong id="restore-title">Previous version available</strong><small id="restore-detail"></small></div>
+          <button id="restore-patch" type="button">Restore</button>
+        </section>
+        <p class="restore-status" id="restore-status" role="status" aria-live="polite"></p>
         <button class="remove-patch" id="remove-patch" type="button" hidden>Remove this installed patch</button>
         <p class="remove-status" id="remove-status" role="status" aria-live="polite"></p>
       </section>

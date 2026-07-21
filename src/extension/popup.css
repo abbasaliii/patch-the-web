@@ -74,6 +74,15 @@ input:focus-visible + .toggle { outline: 3px solid rgba(11, 154, 109, .2); outli
 details { border-top: 1px solid #edf1ef; }
 summary { padding-top: 12px; color: #516058; font-size: 10px; font-weight: 800; cursor: pointer; }
 ul { margin: 9px 0 0; padding-left: 18px; color: #6d7973; font-size: 10px; line-height: 1.65; }
+.restore-row { display: flex; align-items: center; gap: 12px; margin-top: 13px; padding: 11px; border: 1px solid #cfe4da; border-radius: 10px; background: #f4fbf7; }
+.restore-row > div { flex: 1; min-width: 0; }
+.restore-row strong, .restore-row small { display: block; }
+.restore-row strong { color: #174c39; font-size: 10px; }
+.restore-row small { margin-top: 3px; color: #64776e; font: 8px/1.4 ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
+.restore-row button { flex: 0 0 auto; padding: 8px 9px; border: 1px solid #9fcbb7; border-radius: 8px; color: #0a6949; background: #fff; font: 850 9px/1 inherit; cursor: pointer; }
+.restore-row button:focus-visible { outline: 3px solid rgba(11, 154, 109, .2); outline-offset: 2px; }
+.restore-row button:disabled { cursor: wait; opacity: .6; }
+.restore-status { min-height: 0; margin: 7px 0 0; color: #08724f; font-size: 9px; font-weight: 800; }
 .remove-patch { width: 100%; margin-top: 13px; padding: 9px 11px; border: 1px solid #e1c8c3; border-radius: 9px; color: #8b342d; background: #fff9f8; font: 800 10px/1 inherit; cursor: pointer; }
 .remove-patch:hover { border-color: #ce9e96; background: #fff2f0; }
 .remove-patch:focus-visible { outline: 3px solid rgba(139, 52, 45, .17); outline-offset: 2px; }

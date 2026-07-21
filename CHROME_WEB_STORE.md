@@ -14,6 +14,8 @@ Patch the Web lets people add a missing feature to a website without installing 
 
 Before a repair runs, Patch the Web validates its policy, checks its exact host and path scope, confirms a SHA-256 receipt, and preflights every selector against the page currently open. The extension applies only a repair the user explicitly installs for that domain.
 
+When a repair is updated, Patch the Web keeps at most three validated previous versions locally. A restore rechecks the saved SHA-256 receipt, DSL policy, current selectors, and exact-domain permission before switching versions. Removing the repair also removes its local history.
+
 No account. No API key. No advertising. No sale of user data.
 
 ## Privacy practices answers
@@ -30,7 +32,7 @@ No account. No API key. No advertising. No sale of user data.
 
 1. Run `npm run build` and `npm run test:extension`.
 2. Run `node scripts/generate-store-assets.mjs`.
-3. Upload `release/patch-the-web-extension-v0.9.1.zip`; it contains the extension files at the archive root.
+3. Upload `release/patch-the-web-extension-v0.10.0.zip`; it contains the extension files at the archive root.
 4. In Chrome Web Store Developer Dashboard, upload the ZIP, use the listing copy above, and add `https://patch-the-web.vercel.app/privacy/` as the privacy-policy URL.
 5. Set **Remote code: No** and certify no user-data collection/transmission.
 6. Begin as **unlisted** beta; do not claim affiliation with sites that community patches repair.

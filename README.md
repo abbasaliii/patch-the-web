@@ -75,9 +75,9 @@ Requirements for the public demo: Chrome/Chromium 120+. No build, account, crede
 
 Prebuilt artifacts:
 
-- [Patch the Web extension v0.12.0](https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.12.0.zip) — Chrome extension with automatic repair discovery, confirmed activation, rollback, and a private prefilled community-request handoff
+- [Patch the Web extension v0.15.0](https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.15.0.zip) — Chrome extension with automatic repair discovery, confirmed activation, rollback, install recovery, and a guided plain-language repair request
 - [Patch the Web Codex plugin v0.4.1](https://patch-the-web.vercel.app/downloads/patch-the-web-codex-plugin-v0.4.1.zip) — validated authoring plugin with structured repair-request support
-- Extension SHA-256: `15CD4FA42204835E54B6A15455E9CDE990D57C55BE0951D210854F73F67B62F5`
+- Extension SHA-256: `E6C4A6527BF469C8B42305DD4FF42F06DDA6FF6ACAA79C24081D495CEC53179A`
 - Plugin SHA-256: `EFD9B788FBC90E6248427F2421B3239DAAF2CE398D550B01CED5390880DD06CF`
 
 Then:

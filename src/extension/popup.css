@@ -93,6 +93,10 @@ ul { margin: 9px 0 0; padding-left: 18px; color: #6d7973; font-size: 10px; line-
 .empty-state p { margin: 8px auto 0; max-width: 260px; color: #718079; font-size: 12px; line-height: 1.5; }
 .empty-state > p strong { color: #40534a; }
 .complaint-label { display: block; margin: 20px 0 7px; color: #405047; font-size: 11px; font-weight: 800; text-align: left; }
+.complaint-suggestions { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 13px; }
+.complaint-suggestions button { padding: 7px 9px; border: 1px solid #cfe1d8; border-radius: 999px; color: #235341; background: #f7fbf9; cursor: pointer; font-size: 9px; font-weight: 800; }
+.complaint-suggestions button:hover, .complaint-suggestions button:focus-visible { border-color: #07956a; color: #06704f; background: #ebf8f2; }
+.empty-state .request-preview { max-width: none; margin: 0 0 10px; padding: 9px 10px; border-left: 3px solid #6bd4a8; border-radius: 0 7px 7px 0; color: #4c665b; background: #f0f8f4; font-size: 9px; text-align: left; }
 textarea { width: 100%; min-height: 86px; resize: vertical; padding: 11px 12px; border: 1px solid #cfdcd6; border-radius: 11px; color: #1d2d26; background: white; font: 12px/1.45 inherit; outline: none; }
 textarea::placeholder { color: #8a9891; }
 textarea:focus { border-color: #15966d; box-shadow: 0 0 0 3px rgba(21, 150, 109, .12); }

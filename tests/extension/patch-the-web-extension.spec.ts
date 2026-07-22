@@ -214,7 +214,7 @@ test("the registry-installed feature also runs on the real public MetroCare doma
   await expect(page.locator(".care-service:visible h3")).toHaveText("Harbor Family Clinic");
 });
 
-test("an unmatched website offers both a one-click brief and the guided request flow", async () => {
+test("an unmatched website offers plain-language examples and the guided request flow", async () => {
   let worker = context.serviceWorkers()[0];
   if (!worker) worker = await context.waitForEvent("serviceworker");
   const extensionId = new URL(worker.url()).host;
@@ -223,8 +223,12 @@ test("an unmatched website offers both a one-click brief and the guided request 
   const popup = await context.newPage();
   await popup.goto(`chrome-extension://${extensionId}/popup.html`);
   await expect(popup.locator("#empty-state")).toBeVisible();
-  await expect(popup.locator("#author-button")).toHaveText(/Continue to private request/);
-  await expect(popup.locator("#copy-brief")).toHaveText("Author it now with Codex");
+  await expect(popup.locator("#author-button")).toHaveText(/Review repair request/);
+  await expect(popup.locator("#copy-brief")).toHaveText("Build it now with Codex");
+  await expect(popup.locator("[data-complaint]")).toHaveCount(4);
+  await popup.getByRole("button", { name: "Add search & filters" }).click();
+  await expect(popup.locator("#repair-complaint")).toHaveValue(/private search and filters/);
+  await expect(popup.locator("#brief-status")).toContainText("Example added");
   await expect(popup.locator(".guided-author-link")).toHaveAttribute("href", "https://patch-the-web.vercel.app/authors/");
 });
 

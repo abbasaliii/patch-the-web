@@ -54,6 +54,7 @@ const toggle = byId<HTMLInputElement>("patch-toggle");
 const authorButton = byId<HTMLButtonElement>("author-button");
 const copyBriefButton = byId<HTMLButtonElement>("copy-brief");
 const complaint = byId<HTMLTextAreaElement>("repair-complaint");
+const complaintSuggestions = [...document.querySelectorAll<HTMLButtonElement>("[data-complaint]")];
 const briefStatus = byId<HTMLElement>("brief-status");
 const patchFile = byId<HTMLInputElement>("patch-file");
 const importPreview = byId<HTMLElement>("import-preview");
@@ -74,6 +75,13 @@ let currentPatch: MatchedPatchState | undefined;
 let pendingImport: PendingImport | undefined;
 let pendingRestore: PatchHistoryEntry | undefined;
 let installationComplete = false;
+
+complaintSuggestions.forEach((button) => button.addEventListener("click", () => {
+  complaint.value = button.dataset.complaint ?? "";
+  complaint.dispatchEvent(new Event("input", { bubbles: true }));
+  complaint.focus();
+  briefStatus.textContent = "Example added — edit it for this page, then review the request.";
+}));
 
 type InstallStage = "verify" | "access" | "install" | "confirm";
 const INSTALL_STAGES: InstallStage[] = ["verify", "access", "install", "confirm"];

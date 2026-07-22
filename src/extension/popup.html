@@ -79,13 +79,20 @@
         <span class="empty-mark">⌁</span>
         <span class="eyebrow">No community repair yet</span>
         <h1>Request a community repair</h1>
-        <p>Describe what is difficult. We’ll open a private, prefilled request—no selectors, code, or copy-and-paste.</p>
+        <p>Say the outcome you want in plain language. We’ll inspect only the page structure and prepare the request for you.</p>
         <label class="complaint-label" for="repair-complaint">What should work better?</label>
         <textarea id="repair-complaint" maxlength="900" rows="4" placeholder="This form loses my progress, overflows on mobile, and its errors are inaccessible."></textarea>
-        <button class="author-button" id="author-button" type="button"><span aria-hidden="true">→</span> Continue to private request</button>
-        <button class="copy-brief-button" id="copy-brief" type="button">Author it now with Codex</button>
+        <div class="complaint-suggestions" aria-label="Example repair requests">
+          <button type="button" data-complaint="Make this page easier to use on a phone without horizontal scrolling.">Fix mobile layout</button>
+          <button type="button" data-complaint="Add a private search and filters so I can find the right result quickly.">Add search &amp; filters</button>
+          <button type="button" data-complaint="Fix missing labels, keyboard navigation, focus states, and inaccessible error messages.">Improve accessibility</button>
+          <button type="button" data-complaint="Save unfinished non-sensitive form progress on this device and restore it when I return.">Save form progress</button>
+        </div>
+        <p class="request-preview" id="request-preview">Next: review exactly what will be shared, then submit the repair request.</p>
+        <button class="author-button" id="author-button" type="button"><span aria-hidden="true">→</span> Review repair request</button>
+        <button class="copy-brief-button" id="copy-brief" type="button">Build it now with Codex</button>
         <a class="guided-author-link" href="https://patch-the-web.vercel.app/authors/" target="_blank" rel="noreferrer">Open a blank request instead</a>
-        <p class="privacy-note">The handoff stays in the URL fragment, which is not sent to the website. Field values, cookies, storage, and query strings are never included.</p>
+        <p class="privacy-note"><strong>Private by design:</strong> field values, cookies, storage, page text, and URL queries are never included.</p>
         <p class="brief-status" id="brief-status" role="status" aria-live="polite"></p>
       </section>
 

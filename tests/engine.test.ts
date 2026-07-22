@@ -6,6 +6,7 @@ import metroCarePatchJson from "../src/registry/patches/metrocare-service-naviga
 import nuKarachiPatchJson from "../src/registry/patches/nu-karachi-degree-programs.patch-the-web.json";
 import hecCampusPatchJson from "../src/registry/patches/hec-campus-finder.patch-the-web.json";
 import pecProgramPatchJson from "../src/registry/patches/pec-accredited-program-search.patch-the-web.json";
+import punjabZakatHospitalPatchJson from "../examples/quarantined/punjab-zakat-hospital-finder.patch-the-web.json";
 import type { CommunityPatch } from "../src/core/types";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -393,6 +394,38 @@ describe("PEC accredited-program finder", () => {
   it("fails closed when the selector reaches an interactive control", () => {
     document.querySelector(".elementor-widget-container > ol > li")?.append(document.createElement("button"));
     const health = applyPatch(pecProgramPatchJson as CommunityPatch);
+    expect(health).toMatchObject({ applied: false, healthy: 0, total: 1 });
+    expect(document.querySelector(".patch-the-web-list-search")).toBeNull();
+  });
+});
+
+const punjabZakatFixture = readFileSync(resolve(import.meta.dirname, "fixtures/punjab-zakat-hospitals.html"), "utf8");
+
+describe("Punjab Zakat eligible-hospital finder", () => {
+  beforeEach(() => {
+    const parsed = new DOMParser().parseFromString(punjabZakatFixture, "text/html");
+    document.documentElement.removeAttribute("data-patch-the-web-applied");
+    document.documentElement.className = "";
+    document.head.innerHTML = parsed.head.innerHTML;
+    document.body.innerHTML = parsed.body.innerHTML;
+  });
+
+  it("adds one local search across the bounded hospital lists", () => {
+    const health = applyPatch(punjabZakatHospitalPatchJson as CommunityPatch);
+    expect(health).toMatchObject({ applied: true, healthy: 1, total: 1 });
+    const input = document.querySelector<HTMLInputElement>(".patch-the-web-list-search input[type='search']")!;
+    const status = document.querySelector(".patch-the-web-list-search__status");
+    expect(status?.textContent).toBe("43 public hospitals available");
+    input.value = "cardiology";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    const items = [...document.querySelectorAll<HTMLElement>("[data-patch-the-web-list-search-match]")];
+    expect(items.filter((item) => !item.hidden)).toHaveLength(5);
+    expect(status?.textContent).toBe("5 of 43 hospitals match");
+  });
+
+  it("fails closed if the item selector reaches an interactive control", () => {
+    document.querySelector(".field--name-body table li")?.append(document.createElement("button"));
+    const health = applyPatch(punjabZakatHospitalPatchJson as CommunityPatch);
     expect(health).toMatchObject({ applied: false, healthy: 0, total: 1 });
     expect(document.querySelector(".patch-the-web-list-search")).toBeNull();
   });

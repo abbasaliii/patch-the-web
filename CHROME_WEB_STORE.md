@@ -1,4 +1,6 @@
-# Chrome Web Store release pack
+# Chrome Web Store release pack — v0.15.0
+
+This document contains the exact listing, privacy answers, reviewer path, package receipt, and asset inventory for the first Chrome Web Store submission. Dashboard publication is intentionally a human-controlled final step.
 
 ## Listing copy
 
@@ -6,37 +8,75 @@
 
 **Summary:** Safe community repairs for websites you do not own.
 
-**Single purpose:** Patch the Web helps people install verified, domain-scoped usability and accessibility repairs on the specific websites they choose.
+**Single purpose:** Patch the Web lets a person discover, review, install, and control a verified usability or accessibility repair for the exact website they choose.
 
-**Description:**
+**Detailed description:**
 
-Patch the Web lets people add a missing feature to a website without installing arbitrary scripts. Community repairs are constrained JSON manifests that can only use allowlisted transformations such as layout fixes, accessibility labels, keyboard navigation, local draft recovery, public-table filtering, and removal of explicit obstructive UI.
+Patch the Web adds missing usability features to websites without installing arbitrary community scripts. Repairs are constrained JSON manifests. They can use only allowlisted transformations such as responsive layout fixes, accessibility attributes, keyboard navigation, bounded local draft recovery, public-directory search and filtering, or removal of an explicitly matched obstruction.
 
-Before a repair runs, Patch the Web validates its policy, checks its exact host and path scope, confirms a SHA-256 receipt, and preflights every selector against the page currently open. The extension applies only a repair the user explicitly installs for that domain.
+Before a repair runs, Patch the Web checks its policy, exact host and path, SHA-256 receipt, live compatibility status, and every required selector on the open page. Chrome then asks for access to that repair’s exact domain. The repair can be disabled, removed, updated, or restored to a previously validated version at any time.
 
-When a repair is updated, Patch the Web keeps at most three validated previous versions locally. A restore rechecks the saved SHA-256 receipt, DSL policy, current selectors, and exact-domain permission before switching versions. Removing the repair also removes its local history.
+If no repair exists, a person can describe the outcome they want in plain language. The extension creates a privacy-safe request containing only the public origin/path, the person’s complaint, and broad outcome categories. It excludes page text, field values, cookies, storage, and URL query strings.
 
-No account. No API key. No advertising. No sale of user data.
+No account or API key is needed to install and use community repairs. Patch manifests cannot execute JavaScript, inject arbitrary HTML, call remote services, read cookies, or access browser history.
 
-## Privacy practices answers
+## Privacy practices
 
-- **Does it collect or transmit user data?** No. Patch manifests, selector-health results, and optional local preferences remain in the browser. The public registry is fetched from Patch the Web only to discover signed-style patch metadata and manifests; no browsing history, page content, form values, cookies, storage, or query strings are sent.
-- **Remote code:** No. The extension never downloads or executes remote JavaScript. Downloaded patch JSON is validated against a constrained allowlist and cannot contain scripts, HTML, callbacks, fetches, cookies, or eval.
-- **Permissions:**
-  - `activeTab`: inspect only the tab a user opens the popup on.
-  - `scripting`: apply a validated repair only after user confirmation.
-  - `storage`: store installed-patch settings and explicitly allowed local preferences such as a non-sensitive form draft.
-  - optional host access: requested only for the exact site of an explicitly installed repair.
+Chrome Web Store privacy answers must disclose local handling as well as transmission. Use these answers rather than claiming the extension handles no data.
 
-## Upload checklist
+- **Website content:** Yes, limited handling. The extension inspects structural selectors and public directory text on the active page to validate and apply an explicitly chosen repair. Some repairs may locally save non-sensitive form progress or filter preferences when their receipt declares that capability. Sensitive fields are excluded. This information is processed and stored only in the browser and is not transmitted by the extension.
+- **User activity / browsing history:** No collection. The extension does not build, store, or transmit browsing history. It uses the current tab URL only to match an exact repair scope.
+- **Authentication, financial, health, location, personal communications:** Not collected or transmitted. Persistence rules reject passwords, payment fields, verification codes, files, and other sensitive inputs.
+- **Repair requests:** Only after explicit review and confirmation, the public origin/path, user-written complaint, selected outcome categories, and a random request identifier may be submitted to the public request service. No account name or email is requested.
+- **Registry request:** The extension fetches the public Patch the Web registry to discover patch metadata and compatibility receipts. It does not attach page content, form values, cookies, storage, URL queries, or browsing history.
+- **Advertising, profiling, sale, credit decisions:** None.
+- **Remote code:** No. Downloaded JSON is validated against a constrained allowlist and cannot contain scripts, HTML callbacks, fetches, cookies, `eval`, or executable code.
 
-1. Run `npm run check`, `npm run test:browser`, and `npm run test:extension`.
-2. Run `npm run build:extension:store`. This produces a minified package without source maps or development-only localhost permissions.
-3. Run `node scripts/generate-store-assets.mjs`.
-4. Upload `release/patch-the-web-extension-v0.12.0.zip`; it contains the extension files at the archive root. Expected SHA-256: `15CD4FA42204835E54B6A15455E9CDE990D57C55BE0951D210854F73F67B62F5`.
-5. In Chrome Web Store Developer Dashboard, upload the ZIP, use the listing copy above, and add `https://patch-the-web.vercel.app/privacy/` as the privacy-policy URL.
-6. Set **Remote code: No** and certify no user-data collection/transmission.
-7. Begin as **unlisted** beta; do not claim affiliation with sites that community patches repair.
-8. Supply the 1280×800 promo image from `submission-assets/chrome-web-store/` and 128px icon from `src/extension/icons/`.
+Privacy policy URL: `https://patch-the-web.vercel.app/privacy/`
 
-Human dashboard submission remains required because it is tied to the developer account and policy certifications.
+## Permission justifications
+
+- `activeTab`: identify and inspect only the page on which the person opened the extension.
+- `scripting`: run the bundled structural preflight and constrained repair runtime after user action.
+- `storage`: keep installed-repair settings, bounded version history, short-lived install recovery, and explicitly disclosed local preferences or non-sensitive draft data.
+- `optional_host_permissions`: request access only for the exact origin declared by the repair the person chose; the base store install does not request blanket website access.
+
+## Reviewer test path
+
+1. Install the uploaded package and confirm the welcome page opens.
+2. Open `https://patch-the-web.vercel.app/care/`.
+3. Open Patch the Web. The popup should show **MetroCare: personal service navigator**, its exact domain, SHA-256-backed registry receipt, and `11/11` live compatibility health.
+4. Choose **Install verified community feature** and approve access to `patch-the-web.vercel.app` if Chrome asks.
+5. If Chrome closes the popup after permission approval, reopen it. The short-lived install intent resumes automatically.
+6. Confirm the repaired page now has local search, three access filters, private preference persistence, comparison controls, and accessible result counts.
+7. Disable the repair with the domain-scoped switch, then re-enable it.
+8. Open an unsupported normal website and open the extension. Choose **Add search & filters** to verify the plain-language repair-request helper. Do not submit the public request during review.
+
+Expected network behavior: the extension may request `https://patch-the-web.vercel.app/registry/index.json` and the matching patch JSON. Typing into filters, using comparison, and applying the repair generates no page-data request.
+
+## Package receipt
+
+- Upload: `release/patch-the-web-extension-v0.15.0.zip`
+- Size: 63,340 bytes
+- SHA-256: `E6C4A6527BF469C8B42305DD4FF42F06DDA6FF6ACAA79C24081D495CEC53179A`
+- Manifest: V3
+- Archive layout: `manifest.json` and extension files are at the ZIP root
+- Store build: minified, no source maps, no localhost or `127.0.0.1` host permissions
+
+## Visual assets
+
+- Screenshot 1, 1280×800: `submission-assets/chrome-web-store/screenshot-1-before-after-1280x800.png`
+- Screenshot 2, 1280×800: `submission-assets/chrome-web-store/screenshot-2-how-it-works-1280x800.png`
+- Small promotional tile, 440×280: `submission-assets/chrome-web-store/small-promo-440x280.png`
+- Marquee promotional tile, 1400×560: `submission-assets/chrome-web-store/marquee-1400x560.png`
+- Store icon, 128×128: `src/extension/icons/icon-128.png`
+
+## Final dashboard checklist
+
+1. Run `npm run verify` and `npm run test:extension:store`.
+2. Upload the v0.15.0 ZIP and use the listing copy above.
+3. Complete privacy disclosures using the local-handling details above; do not select a blanket “no user data” answer.
+4. Add the privacy-policy URL, screenshots, small tile, marquee tile, category, language, and support URL.
+5. Paste the reviewer test path into the reviewer notes.
+6. Start as an **unlisted beta**. Do not claim affiliation with websites repaired by community patches.
+7. Review every certification yourself, then submit from the developer account.

@@ -1,4 +1,4 @@
-# Chrome Web Store release pack — v0.15.0
+# Chrome Web Store release pack — v0.16.0
 
 This document contains the exact listing, privacy answers, reviewer path, package receipt, and asset inventory for the first Chrome Web Store submission. Dashboard publication is intentionally a human-controlled final step.
 
@@ -14,7 +14,7 @@ This document contains the exact listing, privacy answers, reviewer path, packag
 
 Patch the Web adds missing usability features to websites without installing arbitrary community scripts. Repairs are constrained JSON manifests. They can use only allowlisted transformations such as responsive layout fixes, accessibility attributes, keyboard navigation, bounded local draft recovery, public-directory search and filtering, or removal of an explicitly matched obstruction.
 
-Before a repair runs, Patch the Web checks its policy, exact host and path, SHA-256 receipt, live compatibility status, and every required selector on the open page. Chrome then asks for access to that repair’s exact domain. The repair can be disabled, removed, updated, or restored to a previously validated version at any time.
+Before a repair runs, Patch the Web checks its policy, exact host and path, SHA-256 receipt, live compatibility status, and every required selector on the open page. Chrome then asks for access to that repair’s exact domain. The repair can be disabled, removed, updated, or restored to a previously validated version at any time. A built-in My repairs control center shows every installed scope and version across domains without requesting browsing-history access.
 
 If no repair exists, a person can describe the outcome they want in plain language. The extension creates a privacy-safe request containing only the public origin/path, the person’s complaint, and broad outcome categories. It excludes page text, field values, cookies, storage, and URL query strings.
 
@@ -50,15 +50,16 @@ Privacy policy URL: `https://patch-the-web.vercel.app/privacy/`
 5. If Chrome closes the popup after permission approval, reopen it. The short-lived install intent resumes automatically.
 6. Confirm the repaired page now has local search, three access filters, private preference persistence, comparison controls, and accessible result counts.
 7. Disable the repair with the domain-scoped switch, then re-enable it.
-8. Open an unsupported normal website and open the extension. Choose **Add search & filters** to verify the plain-language repair-request helper. Do not submit the public request during review.
+8. Open **My repairs** from the popup footer. Confirm MetroCare appears with its exact scope, registry source, version, update state, and enable/remove controls.
+9. Open an unsupported normal website and open the extension. Choose **Add search & filters** to verify the plain-language repair-request helper. Do not submit the public request during review.
 
 Expected network behavior: the extension may request `https://patch-the-web.vercel.app/registry/index.json` and the matching patch JSON. Typing into filters, using comparison, and applying the repair generates no page-data request.
 
 ## Package receipt
 
-- Upload: `release/patch-the-web-extension-v0.15.0.zip`
-- Size: 63,340 bytes
-- SHA-256: `E6C4A6527BF469C8B42305DD4FF42F06DDA6FF6ACAA79C24081D495CEC53179A`
+- Upload: `release/patch-the-web-extension-v0.16.0.zip`
+- Size: 75,772 bytes
+- SHA-256: `264B245A733D5D96452C9DB67E41F766E376A465958BC325539C4238132EBC3F`
 - Manifest: V3
 - Archive layout: `manifest.json` and extension files are at the ZIP root
 - Store build: minified, no source maps, no localhost or `127.0.0.1` host permissions
@@ -74,7 +75,7 @@ Expected network behavior: the extension may request `https://patch-the-web.verc
 ## Final dashboard checklist
 
 1. Run `npm run verify` and `npm run test:extension:store`.
-2. Upload the v0.15.0 ZIP and use the listing copy above.
+2. Upload the v0.16.0 ZIP and use the listing copy above.
 3. Complete privacy disclosures using the local-handling details above; do not select a blanket “no user data” answer.
 4. Add the privacy-policy URL, screenshots, small tile, marquee tile, category, language, and support URL.
 5. Paste the reviewer test path into the reviewer notes.

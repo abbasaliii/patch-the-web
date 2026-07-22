@@ -75,9 +75,9 @@ Requirements for the public demo: Chrome/Chromium 120+. No build, account, crede
 
 Prebuilt artifacts:
 
-- [Patch the Web extension v0.15.0](https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.15.0.zip) — Chrome extension with automatic repair discovery, confirmed activation, rollback, install recovery, and a guided plain-language repair request
+- [Patch the Web extension v0.16.0](https://patch-the-web.vercel.app/downloads/patch-the-web-extension-v0.16.0.zip) — Chrome extension with automatic repair discovery, confirmed activation, rollback, install recovery, plain-language requests, and a cross-domain My repairs control center
 - [Patch the Web Codex plugin v0.4.1](https://patch-the-web.vercel.app/downloads/patch-the-web-codex-plugin-v0.4.1.zip) — validated authoring plugin with structured repair-request support
-- Extension SHA-256: `E6C4A6527BF469C8B42305DD4FF42F06DDA6FF6ACAA79C24081D495CEC53179A`
+- Extension SHA-256: `264B245A733D5D96452C9DB67E41F766E376A465958BC325539C4238132EBC3F`
 - Plugin SHA-256: `EFD9B788FBC90E6248427F2421B3239DAAF2CE398D550B01CED5390880DD06CF`
 
 Then:
@@ -153,7 +153,7 @@ npm run verify
 
 Current results:
 
-- 80/80 unit, policy, registry-discovery, compatibility-quarantine, preflight, runtime, intake API, and privacy tests pass
+- 86/86 unit, policy, registry-discovery, compatibility-quarantine, preflight, runtime, intake API, and privacy tests pass
 - 22/22 desktop and 390px browser journeys pass, including six strict automated WCAG A/AA scans across both patched products, the landing page, and Compatibility Sentinel
 - 42/42 mobile and desktop browser journeys pass, including the no-account intake, explicit consent, fallback, public status stages, and strict WCAG A/AA scans
 - 8/8 unpacked Manifest V3 extension integration tests pass; the production-only Store build passes all 7 applicable public-domain journeys

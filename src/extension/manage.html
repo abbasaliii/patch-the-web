@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My repairs — Patch the Web</title>
+    <link rel="stylesheet" href="manage.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="welcome.html"><span aria-hidden="true">//</span><strong>Patch the Web</strong></a>
+      <nav aria-label="Repair links">
+        <a href="https://patch-the-web.vercel.app/registry/" target="_blank" rel="noreferrer">Find repairs</a>
+        <a href="https://patch-the-web.vercel.app/authors/" target="_blank" rel="noreferrer">Request a repair</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div><span class="eyebrow">YOUR CONTROL CENTER</span><h1>My repairs</h1><p>See every repair on this device, where it runs, and whether it is active. Changes stay in this browser.</p></div>
+        <dl aria-label="Repair summary"><div><dt id="repair-count">—</dt><dd>available</dd></div><div><dt id="active-count">—</dt><dd>active</dd></div><div><dt id="domain-count">—</dt><dd>domains</dd></div></dl>
+      </section>
+
+      <section class="notice" aria-label="How changes take effect"><span aria-hidden="true">↻</span><p><strong>After changing a repair, reload its website.</strong> Patch the Web never refreshes unrelated tabs or asks for browsing-history access.</p></section>
+
+      <section class="repair-grid" id="repair-grid" aria-live="polite" aria-busy="true"></section>
+      <section class="empty" id="empty-state" hidden><h2>No repairs are installed yet.</h2><p>Open the public registry, choose a repair, and follow its exact-domain installation flow.</p><a href="https://patch-the-web.vercel.app/registry/" target="_blank" rel="noreferrer">Browse verified repairs →</a></section>
+      <p class="page-status" id="page-status" role="status" aria-live="polite"></p>
+    </main>
+
+    <template id="repair-template">
+      <article class="repair-card">
+        <div class="card-head"><span class="state"></span><span class="version"></span></div>
+        <h2></h2><p class="summary"></p>
+        <div class="capabilities" aria-label="Repair capabilities"></div>
+        <dl class="details"><div><dt>Runs on</dt><dd class="scope"></dd></div><div><dt>Source</dt><dd class="source"></dd></div><div><dt>Update</dt><dd class="update"></dd></div></dl>
+        <div class="actions">
+          <label class="switch-row"><span><strong>Repair enabled</strong><small>Reload matching pages after changing</small></span><input class="enabled" type="checkbox" role="switch" /><i aria-hidden="true"></i></label>
+          <a class="open-site" target="_blank" rel="noreferrer">Open matching website ↗</a>
+          <button class="remove" type="button">Remove repair</button>
+        </div>
+        <p class="card-status" role="status" aria-live="polite"></p>
+      </article>
+    </template>
+
+    <script src="manage.js"></script>
+  </body>
+</html>

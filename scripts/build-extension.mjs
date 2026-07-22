@@ -14,7 +14,8 @@ await build({
   entryPoints: {
     background: resolve(root, "src/extension/background.ts"),
     content: resolve(root, "src/extension/content.ts"),
-    popup: resolve(root, "src/extension/popup.ts")
+    popup: resolve(root, "src/extension/popup.ts"),
+    manage: resolve(root, "src/extension/manage.ts")
   },
   bundle: true,
   outdir,
@@ -29,6 +30,8 @@ await Promise.all([
   cp(resolve(root, "src/extension/popup.css"), resolve(outdir, "popup.css")),
   cp(resolve(root, "src/extension/welcome.html"), resolve(outdir, "welcome.html")),
   cp(resolve(root, "src/extension/welcome.css"), resolve(outdir, "welcome.css")),
+  cp(resolve(root, "src/extension/manage.html"), resolve(outdir, "manage.html")),
+  cp(resolve(root, "src/extension/manage.css"), resolve(outdir, "manage.css")),
   cp(resolve(root, "src/extension/icons"), resolve(outdir, "icons"), { recursive: true }),
   cp(resolve(root, "src/registry/patches"), resolve(outdir, "patches"), { recursive: true })
 ]);

@@ -214,6 +214,45 @@ test("the registry-installed feature also runs on the real public MetroCare doma
   await expect(page.locator(".care-service:visible h3")).toHaveText("Harbor Family Clinic");
 });
 
+test("My repairs manages installed features across domains without browsing-history access", async () => {
+  let worker = context.serviceWorkers()[0];
+  if (!worker) worker = await context.waitForEvent("serviceworker");
+  const extensionId = new URL(worker.url()).host;
+  const manage = await context.newPage();
+  await manage.setViewportSize({ width: 390, height: 844 });
+  await manage.goto(`chrome-extension://${extensionId}/manage.html`);
+
+  await expect(manage.getByRole("heading", { name: "My repairs" })).toBeVisible();
+  const metroCare = manage.locator(".repair-card").filter({ hasText: "MetroCare: personal service navigator" });
+  await expect(metroCare).toBeVisible();
+  await expect(metroCare.locator(".source")).toHaveText("Verified public registry");
+  await expect(metroCare.locator(".update")).toHaveText("Current verified version");
+  await expect(metroCare.locator(".scope")).toContainText("patch-the-web.vercel.app");
+  await manage.screenshot({ path: resolve(import.meta.dirname, "../../submission-assets/patch-the-web-my-repairs-mobile.png"), fullPage: true });
+
+  await metroCare.locator(".switch-row").click();
+  await expect(metroCare.locator(".state")).toHaveText("PAUSED");
+  await expect.poll(async () => worker.evaluate(async (id) => Boolean(((await chrome.storage.local.get("enabledPatches")).enabledPatches as Record<string, boolean>)[id]), metrocarePatchJson.id)).toBe(false);
+  await metroCare.locator(".switch-row").click();
+  await expect(metroCare.locator(".state")).toHaveText("ACTIVE");
+
+  const localTest = manage.locator(".repair-card").filter({ hasText: "Extension-installed test repair" });
+  if (storeBuild) {
+    await expect(localTest).toHaveCount(0);
+  } else {
+    await expect(localTest.locator(".source")).toHaveText("Local author test");
+    await localTest.getByRole("button", { name: "Remove repair" }).click();
+    await expect(localTest).toHaveCount(0);
+    await expect(manage.locator("#page-status")).toContainText("was removed with its local settings and version history");
+    await expect.poll(async () => worker.evaluate(async (id) => !Boolean(((await chrome.storage.local.get("installedPatches")).installedPatches as Record<string, unknown>)[id]), patchId)).toBe(true);
+  }
+
+  const bundledCard = manage.locator(".repair-card").filter({ hasText: "CivicApply: accessible & autosaved" });
+  await expect(bundledCard.locator(".source")).toHaveText("Built into the extension");
+  await expect(bundledCard.locator(".remove")).toBeHidden();
+  expect(await manage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 2)).toBe(true);
+});
+
 test("an unmatched website offers plain-language examples and the guided request flow", async () => {
   let worker = context.serviceWorkers()[0];
   if (!worker) worker = await context.waitForEvent("serviceworker");
@@ -230,6 +269,7 @@ test("an unmatched website offers plain-language examples and the guided request
   await expect(popup.locator("#repair-complaint")).toHaveValue(/private search and filters/);
   await expect(popup.locator("#brief-status")).toContainText("Example added");
   await expect(popup.locator(".guided-author-link")).toHaveAttribute("href", "https://patch-the-web.vercel.app/authors/");
+  await expect(popup.getByRole("link", { name: "My repairs" })).toHaveAttribute("href", "manage.html");
 });
 
 test("an installed community feature can be removed with its local metadata", async () => {

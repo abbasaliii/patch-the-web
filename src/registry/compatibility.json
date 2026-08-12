@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-12T07:52:31.812Z",
+  "generatedAt": "2026-08-12T13:45:37.664Z",
   "registryUrl": "https://patch-the-web.vercel.app/registry/index.json",
   "summary": {
-    "healthy": 3,
+    "healthy": 4,
     "drifted": 0,
-    "unreachable": 2,
+    "unreachable": 1,
     "total": 5
   },
   "patches": [
@@ -14,7 +14,7 @@
       "version": "1.2.1",
       "pageUrl": "https://patch-the-web.vercel.app/demo/",
       "status": "healthy",
-      "checkedAt": "2026-08-12T07:52:31.812Z",
+      "checkedAt": "2026-08-12T13:45:37.664Z",
       "patchSha256": "f15a80b24bab0d4692f61dd44c47e2704e954b659ee0b415e185e3e7a7f76155",
       "healthy": 19,
       "total": 19,
@@ -123,7 +123,7 @@
       "version": "1.0.0",
       "pageUrl": "https://www.hec.gov.pk/english/universities/Pages/DAIs/HEC-recognized-Campuses.aspx",
       "status": "healthy",
-      "checkedAt": "2026-08-12T07:52:31.812Z",
+      "checkedAt": "2026-08-12T13:45:37.664Z",
       "patchSha256": "b0b3d607ced94baf0ec5ec5e4754d3419c6e1cf083a96c244c6b9b020e80c4fe",
       "healthy": 5,
       "total": 5,
@@ -162,7 +162,7 @@
       "version": "1.1.1",
       "pageUrl": "https://patch-the-web.vercel.app/care/",
       "status": "healthy",
-      "checkedAt": "2026-08-12T07:52:31.812Z",
+      "checkedAt": "2026-08-12T13:45:37.664Z",
       "patchSha256": "e38546124f1e80852b6fbc63fd7c66a0974fb997677f0665fc07c9d01e578d21",
       "healthy": 11,
       "total": 11,
@@ -230,22 +230,42 @@
       "id": "org.patchtheweb.nu-karachi-degree-programs",
       "version": "1.0.0",
       "pageUrl": "https://nu.edu.pk/Degree-Programs",
-      "status": "unreachable",
-      "checkedAt": "2026-08-12T07:52:31.812Z",
+      "status": "healthy",
+      "checkedAt": "2026-08-12T13:45:37.664Z",
       "patchSha256": "19fab525f610dc7c0abc77a01e48764f558adc8d924429e459f8e70266b3743d",
-      "healthy": 0,
+      "healthy": 4,
       "total": 4,
-      "fingerprint": "2f77ce05202f90a63f05efe65321b813b0abd7500fa5d80f8e68b1d65a75a758",
+      "fingerprint": "36800091503b69a32a03ad420a0af108cbb79a828449e26bf61ce6b9680bb128",
       "driftedOperationIds": [],
-      "results": [],
-      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://nu.edu.pk/Degree-Programs\", waiting until \"domcontentloaded\"\u001b[22m\n"
+      "results": [
+        {
+          "id": "show-karachi-programs-only",
+          "matched": 22,
+          "healthy": true
+        },
+        {
+          "id": "fit-focused-table",
+          "matched": 1,
+          "healthy": true
+        },
+        {
+          "id": "widen-program-column",
+          "matched": 41,
+          "healthy": true
+        },
+        {
+          "id": "size-karachi-column",
+          "matched": 38,
+          "healthy": true
+        }
+      ]
     },
     {
       "id": "org.patchtheweb.pec-accredited-program-search",
       "version": "1.0.0",
       "pageUrl": "https://www.pec.org.pk/accredition/programs-under-level-1/",
       "status": "unreachable",
-      "checkedAt": "2026-08-12T07:52:31.812Z",
+      "checkedAt": "2026-08-12T13:45:37.664Z",
       "patchSha256": "a8a9bc15fbbea1f5bb7d4383330db4184b252aa0b93b6410a712a729306d907e",
       "healthy": 0,
       "total": 1,
